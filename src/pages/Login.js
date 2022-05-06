@@ -1,23 +1,26 @@
-import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { login } from "redux/features/userSlice";
+import { loginValidationSchema } from "utils/validationSchema";
+
+const initialFormValues = {
+  email: "",
+  password: "",
+};
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const location = useLocation();
 
   const user = useSelector((state) => state.user.user);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    dispatch(login({ email, password }));
+
+  const handleSubmit = (values) => {
+    console.log(values);
+    dispatch(login({ ...values }));
   };
 
   const handleTestLogin = () => {
-    setEmail("adarshbalak@moments.com");
-    setPassword("adarshbalak");
     dispatch(
       login({ email: "adarshbalak@moments.com", password: "adarshbalak" })
     );
@@ -30,51 +33,58 @@ export const Login = () => {
     <div className="flex justify-center h-screen pt-32 ">
       <div className="w-full max-w-[30rem] mx-10">
         <h1 className="text-2xl pb-5 text-center">Login</h1>
-        <form
-          className="flex flex-col p-8 rounded bg-white dark:bg-slate-800"
+        <Formik
+          initialValues={initialFormValues}
           onSubmit={handleSubmit}
+          validationSchema={loginValidationSchema}
         >
-          <div className="mb-3">
-            <label className="block" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="border w-full p-2 rounded focus:outline-none dark:bg-slate-600 border-slate-600"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="block" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="border w-full p-2 rounded focus:outline-none dark:bg-slate-600 border-slate-600"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <input className="btn-primary my-2" type="submit" value="Login" />
-          <button
-            className="btn-secondary my-2"
-            type="button"
-            onClick={handleTestLogin}
-          >
-            Login with test credentaials
-          </button>
-          <div className="flex justify-center mt-2">
-            <p className="mr-3">Don't have an account yet?</p>
-            <Link className="text-teal-500 underline" to="/signup">
-              Register
-            </Link>
-          </div>
-        </form>
+          <Form className="flex flex-col p-8 rounded bg-white dark:bg-slate-800">
+            <div className="mb-3">
+              <label className="block" htmlFor="email">
+                Email
+              </label>
+              <Field
+                type="email"
+                id="email"
+                name="email"
+                className="border w-full p-2 rounded focus:outline-none dark:bg-slate-600 border-slate-600"
+                placeholder="Email"
+              />
+              <p className="text-red-500">
+                <ErrorMessage name="email" />
+              </p>
+            </div>
+            <div className="mb-3">
+              <label className="block" htmlFor="password">
+                Password
+              </label>
+              <Field
+                type="password"
+                id="password"
+                name="password"
+                className="border w-full p-2 rounded focus:outline-none dark:bg-slate-600 border-slate-600"
+                placeholder="Password"
+              />
+              <p className="text-red-500">
+                <ErrorMessage name="password" />
+              </p>
+            </div>
+            <input type="submit" className="btn-primary my-2" value="Login" />
+            <button
+              className="btn-secondary my-2"
+              type="button"
+              onClick={handleTestLogin}
+            >
+              Login with test credentaials
+            </button>
+            <div className="flex justify-center mt-2">
+              <p className="mr-3">Don't have an account yet?</p>
+              <Link className="text-teal-500 underline" to="/signup">
+                Signup
+              </Link>
+            </div>
+          </Form>
+        </Formik>
       </div>
     </div>
   );

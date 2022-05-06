@@ -1,10 +1,14 @@
 import { Layout, RequireAuth } from "components";
-import { Feed, Login } from "pages";
+import { Feed, Login, Signup } from "pages";
 
 export const routes = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
   {
     path: "/",
