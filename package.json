@@ -5,13 +5,9 @@
   "dependencies": {
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-scripts": "5.0.1",
-    "dayjs": "^1.11.1",
-    "jwt-decode": "^3.1.2",
-    "jwt-encode": "^1.0.1",
-    "miragejs": "^0.1.43",
-    "mockman-js": "^1.1.5",
-    "uuid": "^8.3.2"
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
