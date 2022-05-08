@@ -10,6 +10,14 @@
     grid-template-columns: 1fr;
   }
 
+  .btn-primary {
+    @apply p-2 bg-teal-400 rounded dark:bg-teal-500 hover:bg-teal-500 dark:hover:bg-teal-600 transition-all;
+  }
+
+  .btn-secondary {
+    @apply p-2 border border-teal-400 rounded dark:border-teal-500 hover:bg-teal-400 hover:dark:bg-teal-600 hover:dark:border-teal-600 transition-all;
+  }
+
   @screen md {
     .grid-container {
       grid-template-columns: 1fr 3fr;
