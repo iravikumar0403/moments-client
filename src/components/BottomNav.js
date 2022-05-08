@@ -3,8 +3,12 @@ import { HiHome } from "react-icons/hi";
 import { BsPlusCircle } from "react-icons/bs";
 import { MdExplore } from "react-icons/md";
 import { FaBell, FaUserCircle } from "react-icons/fa";
+import { showModal } from "redux/features/modalSlice";
+import { useDispatch } from "react-redux";
 
 export const BottomNav = () => {
+  const dispatch = useDispatch();
+
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 w-full text-slate-900 bg-slate-100 dark:text-slate-100 dark:bg-gray-800 lg:hidden">
       <div className="max-w-3xl flex justify-between items-center mx-auto">
@@ -24,7 +28,7 @@ export const BottomNav = () => {
         >
           <MdExplore size={25} />
         </NavLink>
-        <button to="/" className="px-2">
+        <button to="/" className="px-2" onClick={() => dispatch(showModal())}>
           <BsPlusCircle size={35} />
         </button>
         <NavLink

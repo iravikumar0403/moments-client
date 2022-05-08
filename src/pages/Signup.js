@@ -1,8 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import { signup } from "redux/features/userSlice";
+import { useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { signupValidationSchema } from "utils/validationSchema";
+import { signup } from "redux/features/userSlice";
+import { useAuth } from "hooks/selectors";
 
 const formInitialValues = {
   email: "",
@@ -17,7 +18,7 @@ const formInitialValues = {
 export const Signup = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const user = useSelector((state) => state.user.user);
+  const { user } = useAuth();
 
   const handleSubmit = (values) => {
     dispatch(signup({ ...values }));
