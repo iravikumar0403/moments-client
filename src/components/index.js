@@ -1,5 +1,6 @@
 export { BottomNav } from "./BottomNav";
 export { Layout } from "./Layout";
+export { Loader } from "./Loader";
 export { Navbar } from "./Navbar";
 export { PostCard } from "./PostCard";
 export { PostInputModal } from "./PostInputModal";
