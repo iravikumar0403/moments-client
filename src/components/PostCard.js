@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail, BiBookmark } from "react-icons/bi";
-import { FiMoreHorizontal } from "react-icons/fi";
 import { useAuth } from "hooks/selectors";
+import { PostOptions } from "./PostOptions";
 
 export const PostCard = ({ post }) => {
   const { user } = useAuth();
@@ -21,11 +21,7 @@ export const PostCard = ({ post }) => {
             </Link>
           </div>
         </div>
-        {user._id === post.author._id && (
-          <button className="mx-2 p-3 rounded-full hover:bg-teal-50 hover:text-teal-600">
-            <FiMoreHorizontal size={"1.2rem"} />
-          </button>
-        )}
+        {user._id === post.author._id && <PostOptions />}
       </section>
       <section className="px-4 text-justify">
         <p className="py-2">{post.content}</p>

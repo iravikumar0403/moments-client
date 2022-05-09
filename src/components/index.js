@@ -5,6 +5,7 @@ export { Loader } from "./Loader";
 export { Navbar } from "./Navbar";
 export { PostCard } from "./PostCard";
 export { PostInputModal } from "./PostInputModal";
+export { PostOptions } from "./PostOptions";
 export { PostSkeleton } from "./PostSkeleton";
 export { RequireAuth } from "./RequireAuth";
 export { SideNav } from "./SideNav";
