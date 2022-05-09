@@ -1,4 +1,5 @@
 export { BottomNav } from "./BottomNav";
+export { ButtonWithLoader } from "./ButtonWithLoader";
 export { Layout } from "./Layout";
 export { Loader } from "./Loader";
 export { Navbar } from "./Navbar";

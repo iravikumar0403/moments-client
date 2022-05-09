@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { signupValidationSchema } from "utils/validationSchema";
 import { signup } from "redux/features/userSlice";
 import { useAuth } from "hooks/selectors";
+import { ButtonWithLoader } from "components";
 
 const formInitialValues = {
   email: "",
@@ -18,7 +19,7 @@ const formInitialValues = {
 export const Signup = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { user } = useAuth();
+  const { isLoading, user } = useAuth();
 
   const handleSubmit = (values) => {
     dispatch(signup({ ...values }));
@@ -153,7 +154,14 @@ export const Signup = () => {
                 <label htmlFor="female">Female</label>
               </div>
             </div>
-            <input className="btn-primary my-2" type="submit" value="Signup" />
+            <ButtonWithLoader
+              className="btn-primary my-2"
+              type="submit"
+              value="Signup"
+              isLoading={isLoading}
+            >
+              Signup
+            </ButtonWithLoader>
             <div className="flex justify-center mt-2">
               <p className="mr-3">Already a user?</p>
               <Link className="text-teal-500 underline" to="/login">
