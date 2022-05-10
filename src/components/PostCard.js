@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { BiCommentDetail, BiBookmark } from "react-icons/bi";
+import { BiCommentDetail } from "react-icons/bi";
+import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { useAuth } from "hooks/selectors";
 import { PostOptions } from "./PostOptions";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useDispatch } from "react-redux";
 import { likePost } from "redux/features/postSlice";
+import { savePost } from "redux/features/userSlice";
 dayjs.extend(relativeTime);
 
 export const PostCard = ({ post }) => {
@@ -73,8 +75,15 @@ export const PostCard = ({ post }) => {
         <button
           className="p-2 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
           title="save"
+          onClick={() =>
+            dispatch(savePost({ post_id: post._id, user_id: user._id }))
+          }
         >
-          <BiBookmark />
+          {user.saved.includes(post._id) ? (
+            <BsBookmarkFill className="text-teal-500" />
+          ) : (
+            <BsBookmark />
+          )}
         </button>
       </section>
     </article>

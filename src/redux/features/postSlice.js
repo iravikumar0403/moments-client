@@ -173,7 +173,6 @@ const postSlice = createSlice({
       });
     },
     [likePost.fulfilled]: (state, action) => {
-      state.likingPost = "";
       state.allPosts = state.allPosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );

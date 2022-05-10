@@ -44,6 +44,20 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const savePost = createAsyncThunk(
+  "posts/savePost",
+  async ({ post_id, user_id }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/posts/save/${post_id}`
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -81,6 +95,14 @@ const userSlice = createSlice({
     [signup.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    [savePost.pending]: (state, action) => {
+      state.user.saved.includes(action.meta.arg.post_id)
+        ? state.user.saved.pop(action.meta.arg.post_id)
+        : state.user.saved.push(action.meta.arg.post_id);
+    },
+    [savePost.fulfilled]: (state, action) => {
+      state.user.saved = action.payload.saved;
     },
   },
 });
