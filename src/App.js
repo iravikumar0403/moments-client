@@ -7,8 +7,10 @@ import { useAuth, useModal } from "hooks/selectors";
 import { routes } from "config/routes";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
+import { useScrollToTop } from "hooks/useScrollToTop";
 
 const App = () => {
+  useScrollToTop();
   const routesEl = useRoutes(routes);
   const dispatch = useDispatch();
   const { user } = useAuth();

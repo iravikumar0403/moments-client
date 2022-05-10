@@ -9,6 +9,7 @@ const initialState = {
   error: null,
   userPost: [],
   creatingPost: false,
+  bookmarks: [],
 };
 
 export const getAllPosts = createAsyncThunk(
@@ -105,6 +106,17 @@ export const likePost = createAsyncThunk(
   }
 );
 
+export const getBookmarks = createAsyncThunk("posts/getBookmarks", async () => {
+  try {
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API_URL}/posts/bookmarks`
+    );
+    return data;
+  } catch (error) {
+    toast.error("Failed to fetch bookmarks");
+  }
+});
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -179,6 +191,13 @@ const postSlice = createSlice({
       state.userPost = state.userPost.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
+    },
+    [getBookmarks.pending]: (state) => {
+      state.loading = true;
+    },
+    [getBookmarks.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.bookmarks = action.payload;
     },
   },
 });

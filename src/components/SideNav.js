@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { HiHome } from "react-icons/hi";
 import { MdExplore } from "react-icons/md";
 import { FaBell, FaUserCircle } from "react-icons/fa";
+import { BsBookmarkFill } from "react-icons/bs";
 
 export const SideNav = () => {
   const sidebarData = [
@@ -19,6 +20,11 @@ export const SideNav = () => {
       name: "Notifications",
       path: "/notifications",
       icon: <FaBell size={25} className="mx-3" />,
+    },
+    {
+      name: "Bookmarks",
+      path: "/bookmarks",
+      icon: <BsBookmarkFill size={23} className="mx-3" />,
     },
     {
       name: "Profile",
