@@ -1,14 +1,18 @@
 import { Link } from "react-router-dom";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail, BiBookmark } from "react-icons/bi";
 import { useAuth } from "hooks/selectors";
 import { PostOptions } from "./PostOptions";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useDispatch } from "react-redux";
+import { likePost } from "redux/features/postSlice";
 dayjs.extend(relativeTime);
 
 export const PostCard = ({ post }) => {
   const { user } = useAuth();
+  const dispatch = useDispatch();
+
   return (
     <article className="bg-white dark:bg-gray-800 rounded border-1 mx-2 md:mx-0 mb-5">
       <section className="flex items-center px-4 py-2 justify-between">
@@ -39,19 +43,32 @@ export const PostCard = ({ post }) => {
         <img className="w-full" src={post.images[0]} alt="" />
       )}
       <section className="flex p-4 justify-between">
-        <div>
-          <button
-            className="p-2 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
-            title="like"
-          >
-            <AiOutlineLike />
-          </button>
-          <button
-            className="p-2 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
-            title="comment"
-          >
-            <BiCommentDetail />
-          </button>
+        <div className="flex">
+          <div className="flex items-center mr-2">
+            <button
+              className="p-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+              title="like"
+              onClick={() =>
+                dispatch(likePost({ post_id: post._id, user_id: user._id }))
+              }
+            >
+              {post.likes.includes(user._id) ? (
+                <AiFillLike className="text-teal-500" />
+              ) : (
+                <AiOutlineLike />
+              )}
+            </button>
+            <span>{post.likes.length}</span>
+          </div>
+          <div className="flex items-center mr-2">
+            <button
+              className="p-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+              title="comment"
+            >
+              <BiCommentDetail />
+            </button>
+            <span>{post.comments.length}</span>
+          </div>
         </div>
         <button
           className="p-2 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"

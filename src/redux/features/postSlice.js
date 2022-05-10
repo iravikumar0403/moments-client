@@ -61,7 +61,7 @@ export const addPost = createAsyncThunk("posts/addPost", async (post) => {
 });
 
 export const editPost = createAsyncThunk(
-  "posts/edit",
+  "posts/editPost",
   async (postData, { rejectWithValue }) => {
     try {
       const response = await axios({
@@ -79,12 +79,26 @@ export const editPost = createAsyncThunk(
 );
 
 export const deletePost = createAsyncThunk(
-  "posts/delete",
+  "posts/deletePost",
   async (post_id, { rejectWithValue }) => {
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${post_id}`);
       toast.success("Post deleted!");
       return;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
+export const likePost = createAsyncThunk(
+  "posts/likePost",
+  async ({ post_id, user_id }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/posts/like/${post_id}`
+      );
+      return data;
     } catch (error) {
       return rejectWithValue(error.response.message);
     }
@@ -132,13 +146,39 @@ const postSlice = createSlice({
         ...state.userPost.filter((post) => post._id !== action.payload._id),
       ];
     },
-    [deletePost.fulfilled]: (state, action) => {
-      console.log(action);
+    [deletePost.pending]: (state, action) => {
       state.allPosts = state.allPosts.filter(
         (post) => post._id !== action.meta.arg
       );
       state.userPost = state.userPost.filter(
         (post) => post._id !== action.meta.arg
+      );
+    },
+    [likePost.pending]: (state, action) => {
+      state.allPosts = state.allPosts.map((post) => {
+        if (post._id === action.meta.arg.post_id) {
+          post.likes.includes(action.meta.arg.user_id)
+            ? post.likes.pop(action.meta.arg.user_id)
+            : post.likes.push(action.meta.arg.user_id);
+        }
+        return post;
+      });
+      state.userPost = state.userPost.map((post) => {
+        if (post._id === action.meta.arg.post_id) {
+          post.likes.includes(action.meta.arg.user_id)
+            ? post.likes.push(action.meta.arg.user_id)
+            : post.likes.pop(action.meta.arg.user_id);
+        }
+        return post;
+      });
+    },
+    [likePost.fulfilled]: (state, action) => {
+      state.likingPost = "";
+      state.allPosts = state.allPosts.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      );
+      state.userPost = state.userPost.map((post) =>
+        post._id === action.payload._id ? action.payload : post
       );
     },
   },
