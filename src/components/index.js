@@ -2,6 +2,8 @@ export { BottomNav } from "./BottomNav";
 export { Layout } from "./Layout";
 export { Navbar } from "./Navbar";
 export { PostCard } from "./PostCard";
+export { PostInputModal } from "./PostInputModal";
+export { PostSkeleton } from "./PostSkeleton";
 export { RequireAuth } from "./RequireAuth";
 export { SideNav } from "./SideNav";
 export { Toast } from "./Toast";

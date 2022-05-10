@@ -1,28 +1,27 @@
+import { Link } from "react-router-dom";
 import { AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail, BiBookmark } from "react-icons/bi";
 
-export const PostCard = () => {
+export const PostCard = ({ post }) => {
   return (
     <article className="bg-white dark:bg-gray-800 rounded border-1 mx-2 md:mx-0 mb-5">
       <section className="flex items-center px-4 py-2">
         <img
           className="w-12 rounded-full"
-          src="https://i.pravatar.cc/300"
-          alt="author name"
+          src={post.author.avatar || "https://i.pravatar.cc/300"}
+          alt={post.author.firstname}
         />
         <div>
-          <p className="px-4 text-lg">Test user</p>
-          <p className="px-4 text-sm text-slate-500">user bio if available</p>
+          <Link to={`profile/${post.author._id}`} className="px-4 text-lg">
+            {post.author.firstname + " " + post.author.lastname}
+          </Link>
         </div>
       </section>
       <section className="px-4 text-justify">
-        <p className="py-2">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel
-          libero eu nibh ullamcorper blandit.
-        </p>
+        <p className="py-2">{post.content}</p>
       </section>
-      {"src" && (
-        <img className="w-full" src="https://picsum.photos/500/300" alt="" />
+      {post.images.length > 0 && (
+        <img className="w-full" src={post.images[0]} alt="" />
       )}
       <section className="flex p-4 justify-between">
         <div>

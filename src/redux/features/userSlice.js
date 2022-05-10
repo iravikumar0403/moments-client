@@ -17,6 +17,9 @@ export const login = createAsyncThunk(
       const { data } = await axios.post(`${REACT_APP_API_URL}/auth/login`, {
         ...creds,
       });
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${data.user.token}`;
       localStorage.setItem("user", JSON.stringify(data.user));
       return data;
     } catch (error) {
@@ -46,7 +49,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout: (state, action) => {
+    logout: (state) => {
       state = initialState;
     },
     loginFromLocal: (state, action) => {
@@ -56,7 +59,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
-    [login.pending]: (state, action) => {
+    [login.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -68,7 +71,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    [signup.pending]: (state, action) => {
+    [signup.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
     },
