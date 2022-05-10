@@ -74,6 +74,19 @@ export const editPost = createAsyncThunk(
   }
 );
 
+export const deletePost = createAsyncThunk(
+  "posts/delete",
+  async (post_id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${post_id}`);
+      toast.success("Post deleted!");
+      return;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -114,6 +127,15 @@ const postSlice = createSlice({
         action.payload,
         ...state.userPost.filter((post) => post._id !== action.payload._id),
       ];
+    },
+    [deletePost.fulfilled]: (state, action) => {
+      console.log(action);
+      state.allPosts = state.allPosts.filter(
+        (post) => post._id !== action.meta.arg
+      );
+      state.userPost = state.userPost.filter(
+        (post) => post._id !== action.meta.arg
+      );
     },
   },
 });

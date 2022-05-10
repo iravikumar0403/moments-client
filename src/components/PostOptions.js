@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { showModal } from "redux/features/modalSlice";
+import { deletePost } from "redux/features/postSlice";
 
 export const PostOptions = ({ post }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -26,7 +27,10 @@ export const PostOptions = ({ post }) => {
           >
             Edit
           </button>
-          <button className="w-full py-1 rounded hover:text-teal-500">
+          <button
+            className="w-full py-1 rounded hover:text-teal-500"
+            onClick={() => dispatch(deletePost(post._id))}
+          >
             Delete
           </button>
         </div>
