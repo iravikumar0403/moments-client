@@ -23,7 +23,7 @@ export const Feed = () => {
         <div className="flex bg-white mb-2 p-4 rounded dark:bg-slate-800">
           <img
             className="w-12 rounded-full mr-2"
-            src="https://i.pravatar.cc/300"
+            src="http://www.gravatar.com/avatar/?d=mp"
             alt="author name"
           />
           <button

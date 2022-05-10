@@ -15,7 +15,7 @@ export const PostCard = ({ post }) => {
         <div className="flex items-center">
           <img
             className="w-12 rounded-full"
-            src={post.author.avatar || "https://i.pravatar.cc/300"}
+            src={post.author.avatar || "http://www.gravatar.com/avatar/?d=mp"}
             alt={post.author.firstname}
           />
           <div>
