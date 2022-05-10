@@ -10,7 +10,7 @@ import { addPost, editPost } from "redux/features/postSlice";
 export const PostInputModal = () => {
   const { selectedPost } = useModal();
   const [postContent, setPostContent] = useState("" || selectedPost?.content);
-  const [files, setFiles] = useState();
+  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { creatingPost } = usePosts();
 
@@ -49,7 +49,7 @@ export const PostInputModal = () => {
             value={postContent}
           ></textarea>
           <div>
-            {(files || selectedPost?.images) && (
+            {(files.length > 0 || selectedPost?.images) && (
               <img
                 className="h-32 mx-auto my-2 rounded"
                 src={

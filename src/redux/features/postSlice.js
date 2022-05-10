@@ -26,29 +26,33 @@ export const getAllPosts = createAsyncThunk(
 
 export const addPost = createAsyncThunk("posts/addPost", async (post) => {
   try {
-    const fileData = new FormData();
-    fileData.append("file", post.images);
-    fileData.append("upload_preset", "w1pwqcqw");
-    const {
-      data: { secure_url },
-    } = await axios({
-      transformRequest: [
-        (data, headers) => {
-          delete headers.common.Authorization;
-          return data;
-        },
-      ],
-      method: "POST",
-      url: "https://api.cloudinary.com/v1_1/moments-social/image/upload",
-      data: fileData,
-    });
+    const postData = {
+      content: post.content,
+      images: [],
+    };
+    if (post.images) {
+      const fileData = new FormData();
+      fileData.append("file", post.images);
+      fileData.append("upload_preset", "w1pwqcqw");
+      const {
+        data: { secure_url },
+      } = await axios({
+        transformRequest: [
+          (data, headers) => {
+            delete headers.common.Authorization;
+            return data;
+          },
+        ],
+        method: "POST",
+        url: "https://api.cloudinary.com/v1_1/moments-social/image/upload",
+        data: fileData,
+      });
+      postData.images = [secure_url];
+    }
     const { data } = await axios({
       url: `${REACT_APP_API_URL}/posts`,
       method: "POST",
-      data: {
-        content: post.content,
-        images: [secure_url],
-      },
+      data: postData,
     });
     return data;
   } catch (error) {
