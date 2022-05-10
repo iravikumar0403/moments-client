@@ -56,6 +56,24 @@ export const addPost = createAsyncThunk("posts/addPost", async (post) => {
   }
 });
 
+export const editPost = createAsyncThunk(
+  "posts/edit",
+  async (postData, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_API_URL}/posts/${postData._id}`,
+        data: {
+          content: postData.content,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -72,7 +90,7 @@ const postSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    [addPost.pending]: (state, action) => {
+    [addPost.pending]: (state) => {
       state.creatingPost = true;
     },
     [addPost.fulfilled]: (state, action) => {
@@ -80,8 +98,22 @@ const postSlice = createSlice({
       state.userPost = [action.payload, ...state.userPost];
       state.creatingPost = false;
     },
-    [addPost.rejected]: (state, action) => {
+    [addPost.rejected]: (state) => {
       state.creatingPost = false;
+    },
+    [editPost.pending]: (state, action) => {
+      state.creatingPost = true;
+    },
+    [editPost.fulfilled]: (state, action) => {
+      state.creatingPost = false;
+      state.allPosts = [
+        action.payload,
+        ...state.allPosts.filter((post) => post._id !== action.payload._id),
+      ];
+      state.userPost = [
+        action.payload,
+        ...state.userPost.filter((post) => post._id !== action.payload._id),
+      ];
     },
   },
 });

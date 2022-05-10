@@ -10,12 +10,10 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     showModal: (state, action) => {
-      console.log("here");
       state.isVisible = true;
       if (action.payload) state.selectedPost = action.payload;
     },
     closeModal: (state) => {
-      console.log("here");
       state.isVisible = false;
       state.selectedPost = null;
     },

@@ -3,6 +3,9 @@ import { AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail, BiBookmark } from "react-icons/bi";
 import { useAuth } from "hooks/selectors";
 import { PostOptions } from "./PostOptions";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export const PostCard = ({ post }) => {
   const { user } = useAuth();
@@ -19,9 +22,15 @@ export const PostCard = ({ post }) => {
             <Link to={`profile/${post.author._id}`} className="px-4 text-lg">
               {post.author.firstname + " " + post.author.lastname}
             </Link>
+            <div>
+              <p className="inline-block text-xs ml-4 text-slate-500">
+                {dayjs(post.createdAt).fromNow()}
+                {post.isEdited && <span className="ml-1">&bull; Edited</span>}
+              </p>
+            </div>
           </div>
         </div>
-        {user._id === post.author._id && <PostOptions />}
+        {user._id === post.author._id && <PostOptions post={post} />}
       </section>
       <section className="px-4 text-justify">
         <p className="py-2">{post.content}</p>

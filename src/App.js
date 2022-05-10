@@ -17,6 +17,7 @@ const App = () => {
   useEffect(() => {
     if (isVisible) {
       document.body.style.overflow = "hidden";
+      window.scrollTo(0, 0);
     } else {
       document.body.style.overflow = "";
     }

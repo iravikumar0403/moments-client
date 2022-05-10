@@ -18,7 +18,6 @@ export const Login = () => {
   const { isLoading, user } = useAuth();
 
   const handleSubmit = (values) => {
-    console.log(values);
     dispatch(login({ ...values }));
   };
 
