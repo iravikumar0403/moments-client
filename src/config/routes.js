@@ -48,6 +48,10 @@ export const routes = [
             element: <Notifications />,
           },
           {
+            path: "/profile",
+            element: <Profile />,
+          },
+          {
             path: "/profile/:username",
             element: <Profile />,
           },
