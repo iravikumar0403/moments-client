@@ -161,14 +161,12 @@ export const getPostById = createAsyncThunk(
       const currentPost = state.posts.allPosts.find(
         (post) => post._id === post_id
       );
-      console.log(currentPost);
       if (currentPost) {
         return currentPost;
       } else {
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/posts/${post_id}`
         );
-        console.log(data);
         return data;
       }
     } catch (error) {

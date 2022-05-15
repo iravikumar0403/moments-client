@@ -6,7 +6,6 @@ export const useAutoResize = (input, initialHeight = "0px") => {
   useEffect(() => {
     if (ref.current) {
       ref.current.style.height = initialHeight || "auto";
-      console.log(ref.current.scrollHeight);
       ref.current.style.height = ref.current?.scrollHeight + 2 + "px";
     }
   }, [input, initialHeight]);
