@@ -1,5 +1,5 @@
 import { Layout, RequireAuth } from "components";
-import { Feed, Login, Signup } from "pages";
+import { Explore, Feed, Login, Signup } from "pages";
 
 export const routes = [
   {
@@ -21,6 +21,10 @@ export const routes = [
           {
             path: "/",
             element: <Feed />,
+          },
+          {
+            path: "/explore",
+            element: <Explore />,
           },
         ],
       },

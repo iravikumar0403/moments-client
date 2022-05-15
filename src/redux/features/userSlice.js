@@ -17,10 +17,8 @@ export const login = createAsyncThunk(
       const { data } = await axios.post(`${REACT_APP_API_URL}/auth/login`, {
         ...creds,
       });
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${data.user.token}`;
-      localStorage.setItem("user", JSON.stringify(data.user));
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      localStorage.setItem("user", JSON.stringify(data));
       return data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -36,7 +34,8 @@ export const signup = createAsyncThunk(
       const { data } = await axios.post(`${REACT_APP_API_URL}/auth/signup`, {
         ...userdetails,
       });
-      localStorage.setItem("user", JSON.stringify(data.user));
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      localStorage.setItem("user", JSON.stringify(data));
       return data;
     } catch (error) {
       toast.error(error.response.data.message);

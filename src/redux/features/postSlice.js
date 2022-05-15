@@ -26,35 +26,70 @@ export const getAllPosts = createAsyncThunk(
 
 export const addPost = createAsyncThunk("posts/addPost", async (post) => {
   try {
-    const fileData = new FormData();
-    fileData.append("file", post.images);
-    fileData.append("upload_preset", "w1pwqcqw");
-    const {
-      data: { secure_url },
-    } = await axios({
-      transformRequest: [
-        (data, headers) => {
-          delete headers.common.Authorization;
-          return data;
-        },
-      ],
-      method: "POST",
-      url: "https://api.cloudinary.com/v1_1/moments-social/image/upload",
-      data: fileData,
-    });
+    const postData = {
+      content: post.content,
+      images: [],
+    };
+    if (post.images) {
+      const fileData = new FormData();
+      fileData.append("file", post.images);
+      fileData.append("upload_preset", "w1pwqcqw");
+      const {
+        data: { secure_url },
+      } = await axios({
+        transformRequest: [
+          (data, headers) => {
+            delete headers.common.Authorization;
+            return data;
+          },
+        ],
+        method: "POST",
+        url: "https://api.cloudinary.com/v1_1/moments-social/image/upload",
+        data: fileData,
+      });
+      postData.images = [secure_url];
+    }
     const { data } = await axios({
       url: `${REACT_APP_API_URL}/posts`,
       method: "POST",
-      data: {
-        content: post.content,
-        images: [secure_url],
-      },
+      data: postData,
     });
     return data;
   } catch (error) {
     toast.error("Failed to post moment.");
   }
 });
+
+export const editPost = createAsyncThunk(
+  "posts/edit",
+  async (postData, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_API_URL}/posts/${postData._id}`,
+        data: {
+          content: postData.content,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "posts/delete",
+  async (post_id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${post_id}`);
+      toast.success("Post deleted!");
+      return;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "posts",
@@ -72,7 +107,7 @@ const postSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    [addPost.pending]: (state, action) => {
+    [addPost.pending]: (state) => {
       state.creatingPost = true;
     },
     [addPost.fulfilled]: (state, action) => {
@@ -80,8 +115,31 @@ const postSlice = createSlice({
       state.userPost = [action.payload, ...state.userPost];
       state.creatingPost = false;
     },
-    [addPost.rejected]: (state, action) => {
+    [addPost.rejected]: (state) => {
       state.creatingPost = false;
+    },
+    [editPost.pending]: (state, action) => {
+      state.creatingPost = true;
+    },
+    [editPost.fulfilled]: (state, action) => {
+      state.creatingPost = false;
+      state.allPosts = [
+        action.payload,
+        ...state.allPosts.filter((post) => post._id !== action.payload._id),
+      ];
+      state.userPost = [
+        action.payload,
+        ...state.userPost.filter((post) => post._id !== action.payload._id),
+      ];
+    },
+    [deletePost.fulfilled]: (state, action) => {
+      console.log(action);
+      state.allPosts = state.allPosts.filter(
+        (post) => post._id !== action.meta.arg
+      );
+      state.userPost = state.userPost.filter(
+        (post) => post._id !== action.meta.arg
+      );
     },
   },
 });
