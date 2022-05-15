@@ -1,5 +1,6 @@
 import { Layout, RequireAuth } from "components";
-import { Explore, Feed, Login, Signup } from "pages";
+import { Bookmarks, Explore, Feed, Login, Signup } from "pages";
+import { SinglePost } from "../pages/SinglePost";
 
 export const routes = [
   {
@@ -25,6 +26,14 @@ export const routes = [
           {
             path: "/explore",
             element: <Explore />,
+          },
+          {
+            path: "/bookmarks",
+            element: <Bookmarks />,
+          },
+          {
+            path: "/post/:id",
+            element: <SinglePost />,
           },
         ],
       },

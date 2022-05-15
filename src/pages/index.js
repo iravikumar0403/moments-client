@@ -1,3 +1,4 @@
+export { Bookmarks } from "./Bookmarks";
 export { Explore } from "./Explore";
 export { Feed } from "./Feed";
 export { Login } from "./Login";
