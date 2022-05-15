@@ -1,6 +1,13 @@
 import { Layout, RequireAuth } from "components";
-import { Bookmarks, Explore, Feed, Login, Signup } from "pages";
-import { SinglePost } from "../pages/SinglePost";
+import {
+  Bookmarks,
+  Explore,
+  Feed,
+  Login,
+  Notifications,
+  Signup,
+  SinglePost,
+} from "pages";
 
 export const routes = [
   {
@@ -34,6 +41,10 @@ export const routes = [
           {
             path: "/post/:id",
             element: <SinglePost />,
+          },
+          {
+            path: "/notifications",
+            element: <Notifications />,
           },
         ],
       },
