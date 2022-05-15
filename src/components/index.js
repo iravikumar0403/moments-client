@@ -1,5 +1,7 @@
+export { Avatar } from "./Avatar";
 export { BottomNav } from "./BottomNav";
 export { ButtonWithLoader } from "./ButtonWithLoader";
+export { Comment } from "./Comment";
 export { Layout } from "./Layout";
 export { Loader } from "./Loader";
 export { Navbar } from "./Navbar";

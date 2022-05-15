@@ -1,6 +1,6 @@
 export const ButtonWithLoader = ({ isLoading, children, ...rest }) => {
   return (
-    <button {...rest} disabled={isLoading}>
+    <button disabled={isLoading} {...rest}>
       <span className="mx-2">{children}</span>
       {isLoading && (
         <svg

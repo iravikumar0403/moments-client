@@ -1,29 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { useAuth } from "hooks/selectors";
+import { useAuth, usePosts } from "hooks/selectors";
 import { PostOptions } from "./PostOptions";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useDispatch } from "react-redux";
-import { likePost } from "redux/features/postSlice";
-import { savePost } from "redux/features/userSlice";
+import { bookmarkPost, likePost } from "redux/features/postSlice";
+import { Avatar } from "./Avatar";
 dayjs.extend(relativeTime);
 
 export const PostCard = ({ post }) => {
   const { user } = useAuth();
+  const { bookmarks } = usePosts();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
-    <article className="bg-white dark:bg-gray-800 rounded border-1 mx-2 md:mx-0 mb-5">
+    <article className="bg-white dark:bg-gray-800 rounded border-1 mx-2 md:mx-0 mb-5 shadow-md">
       <section className="flex items-center px-4 py-2 justify-between">
         <div className="flex items-center">
-          <img
-            className="w-12 rounded-full"
-            src={post.author.avatar || "http://www.gravatar.com/avatar/?d=mp"}
-            alt={post.author.firstname}
-          />
+          <Avatar profile={post.author.avatar} name={post.author.firstname} />
           <div>
             <Link to={`profile/${post.author._id}`} className="px-4 text-lg">
               {post.author.firstname + " " + post.author.lastname}
@@ -66,6 +64,9 @@ export const PostCard = ({ post }) => {
             <button
               className="p-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
               title="comment"
+              onClick={() => {
+                navigate(`/post/${post._id}`);
+              }}
             >
               <BiCommentDetail />
             </button>
@@ -73,16 +74,14 @@ export const PostCard = ({ post }) => {
           </div>
         </div>
         <button
-          className="p-2 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+          className="py-2 px-3 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
           title="save"
-          onClick={() =>
-            dispatch(savePost({ post_id: post._id, user_id: user._id }))
-          }
+          onClick={() => dispatch(bookmarkPost(post))}
         >
-          {user.saved.includes(post._id) ? (
-            <BsBookmarkFill className="text-teal-500" />
+          {bookmarks.find((bookmark) => bookmark._id === post._id) ? (
+            <BsBookmarkFill className="text-teal-500" size="1.1rem" />
           ) : (
-            <BsBookmark />
+            <BsBookmark size="1.1rem" />
           )}
         </button>
       </section>

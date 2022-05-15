@@ -1,16 +1,18 @@
 import { useEffect } from "react";
-import { Loader, PostCard, PostSkeleton } from "components";
+import { Loader, PostCard, PostSkeleton, Avatar } from "components";
 import { useDispatch } from "react-redux";
-import { usePosts } from "hooks/selectors";
-import { getAllPosts } from "redux/features/postSlice";
+import { useAuth, usePosts } from "hooks/selectors";
+import { getAllPosts, getBookmarks } from "redux/features/postSlice";
 import { showModal } from "redux/features/modalSlice";
 
 export const Feed = () => {
   const { loading, creatingPost, allPosts } = usePosts();
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllPosts());
+    dispatch(getBookmarks());
   }, [dispatch]);
 
   if (loading && allPosts.length === 0) {
@@ -21,13 +23,9 @@ export const Feed = () => {
     <>
       <div className="hidden md:block border-b mb-2 dark:border-slate-600">
         <div className="flex bg-white mb-2 p-4 rounded dark:bg-slate-800">
-          <img
-            className="w-12 rounded-full mr-2"
-            src="http://www.gravatar.com/avatar/?d=mp"
-            alt="author name"
-          />
+          <Avatar profile={user.avatar} name={user.firstname} />
           <button
-            className="rounded-full w-full bg-slate-100 text-left px-5 text-gray-500 dark:bg-slate-700 dark:text-gray-200"
+            className="rounded-full w-full bg-slate-100 text-left ml-2 px-5 text-gray-500 dark:bg-slate-700 dark:text-gray-200"
             onClick={() => dispatch(showModal())}
           >
             Start a post

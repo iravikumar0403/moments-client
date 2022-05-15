@@ -6,10 +6,12 @@ const { REACT_APP_API_URL } = process.env;
 const initialState = {
   loading: false,
   allPosts: [],
-  error: null,
   userPost: [],
-  creatingPost: false,
   bookmarks: [],
+  creatingPost: false,
+  currentPost: null,
+  commentLoading: false,
+  error: null,
 };
 
 export const getAllPosts = createAsyncThunk(
@@ -106,6 +108,21 @@ export const likePost = createAsyncThunk(
   }
 );
 
+export const bookmarkPost = createAsyncThunk(
+  "posts/bookmark",
+  async (post, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/posts/save/${post._id}`
+      );
+      return data;
+    } catch (error) {
+      toast.error("Something went wrong");
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 export const getBookmarks = createAsyncThunk("posts/getBookmarks", async () => {
   try {
     const { data } = await axios.get(
@@ -116,6 +133,50 @@ export const getBookmarks = createAsyncThunk("posts/getBookmarks", async () => {
     toast.error("Failed to fetch bookmarks");
   }
 });
+
+export const addComment = createAsyncThunk(
+  "posts/addComment",
+  async ({ post_id, comment }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}/comments/${post_id}`,
+        data: {
+          content: comment,
+        },
+      });
+      return data;
+    } catch (error) {
+      toast.error("Something went wrong");
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
+export const getPostById = createAsyncThunk(
+  "posts/getPostById",
+  async (post_id, { rejectWithValue, getState }) => {
+    try {
+      const state = getState();
+      const currentPost = state.posts.allPosts.find(
+        (post) => post._id === post_id
+      );
+      console.log(currentPost);
+      if (currentPost) {
+        return currentPost;
+      } else {
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_API_URL}/posts/${post_id}`
+        );
+        console.log(data);
+        return data;
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "posts",
@@ -191,6 +252,26 @@ const postSlice = createSlice({
       state.userPost = state.userPost.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
+      state.currentPost = action.payload;
+    },
+    [bookmarkPost.pending]: (state, action) => {
+      if (
+        state.bookmarks.find((bookmark) => bookmark._id === action.meta.arg._id)
+      ) {
+        state.bookmarks = state.bookmarks.filter(
+          (bookmark) => bookmark._id !== action.meta.arg._id
+        );
+      } else {
+        state.bookmarks = [...state.bookmarks, action.meta.arg];
+      }
+    },
+    [bookmarkPost.fulfilled]: (state, action) => {
+      state.bookmarks = action.payload;
+    },
+    [bookmarkPost.rejected]: (state, action) => {
+      state.bookmarks = state.bookmarks.filter(
+        (bookmark) => bookmark._id !== action.meta.arg._id
+      );
     },
     [getBookmarks.pending]: (state) => {
       state.loading = true;
@@ -198,6 +279,26 @@ const postSlice = createSlice({
     [getBookmarks.fulfilled]: (state, action) => {
       state.loading = false;
       state.bookmarks = action.payload;
+    },
+    [getPostById.pending]: (state) => {
+      state.loading = true;
+    },
+    [getPostById.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.currentPost = action.payload;
+    },
+    [addComment.pending]: (state) => {
+      state.commentLoading = true;
+    },
+    [addComment.fulfilled]: (state, action) => {
+      state.commentLoading = false;
+      state.allPosts = state.allPosts.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      );
+      state.userPost = state.userPost.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      );
+      state.currentPost = action.payload;
     },
   },
 });

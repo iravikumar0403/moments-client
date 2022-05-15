@@ -11,7 +11,7 @@
   }
 
   .btn-primary {
-    @apply p-2 bg-teal-400 rounded dark:bg-teal-500 hover:bg-teal-500 dark:hover:bg-teal-600 transition-all shadow;
+    @apply p-2 bg-teal-400 rounded dark:bg-teal-500 hover:bg-teal-500 dark:hover:bg-teal-600 transition-all shadow disabled:bg-teal-600;
   }
 
   .btn-secondary {

@@ -12,8 +12,14 @@ export const Bookmarks = () => {
     dispatch(getBookmarks());
   }, [dispatch]);
 
-  if (loading && bookmarks.length === 0) {
+  if (loading) {
     return <Loader />;
+  }
+
+  if (bookmarks.length === 0) {
+    return (
+      <p className="text-center my-2 font-medium">No bookmarks to show.</p>
+    );
   }
 
   return bookmarks.map((post) => <PostCard post={post} key={post._id} />);
