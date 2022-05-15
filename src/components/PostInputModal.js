@@ -53,7 +53,9 @@ export const PostInputModal = () => {
               <img
                 className="h-32 mx-auto my-2 rounded"
                 src={
-                  files ? URL.createObjectURL(files[0]) : selectedPost.images[0]
+                  files.length > 0
+                    ? URL.createObjectURL(files[0])
+                    : selectedPost.images[0]
                 }
                 alt=""
               />
