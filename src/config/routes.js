@@ -5,6 +5,7 @@ import {
   Feed,
   Login,
   Notifications,
+  Profile,
   Signup,
   SinglePost,
 } from "pages";
@@ -45,6 +46,10 @@ export const routes = [
           {
             path: "/notifications",
             element: <Notifications />,
+          },
+          {
+            path: "/profile/:username",
+            element: <Profile />,
           },
         ],
       },
