@@ -1,4 +1,5 @@
 import { useModal, usePosts } from "hooks/selectors";
+import { useAutoResize } from "hooks/useAutoResize";
 import { useState } from "react";
 import reactDom from "react-dom";
 import { IoIosClose } from "react-icons/io";
@@ -7,12 +8,15 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "redux/features/modalSlice";
 import { addPost, editPost } from "redux/features/postSlice";
 
+const initialTextAreaHeight = "5rem";
+
 export const PostInputModal = () => {
   const { selectedPost } = useModal();
   const [postContent, setPostContent] = useState("" || selectedPost?.content);
   const [files, setFiles] = useState([]);
-  const dispatch = useDispatch();
   const { creatingPost } = usePosts();
+  const textAreaRef = useAutoResize(postContent, initialTextAreaHeight);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,10 +48,15 @@ export const PostInputModal = () => {
         </div>
         <form className="flex flex-col w-max-full mt-4" onSubmit={handleSubmit}>
           <textarea
-            className="focus:outline-none border rounded p-2 dark:bg-slate-700 dark:text-white"
+            ref={textAreaRef}
+            maxLength="280"
+            className="focus:outline-none p-2 resize-none border rounded dark:bg-slate-700 dark:text-white"
             onChange={(e) => setPostContent(e.target.value)}
             value={postContent}
           ></textarea>
+          <span className="text-right text-xs text-slate-400">
+            {280 - postContent.length} characters remaining
+          </span>
           <div>
             {(files.length > 0 || selectedPost?.images) && (
               <img

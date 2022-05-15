@@ -45,7 +45,7 @@ export const SinglePost = () => {
           ref={textAreaRef}
           className="w-full h-10 border-1 border-teal-500 border-solid rounded p-2 ml-2 shadow-md resize-none dark:text-white dark:bg-slate-700 focus:outline-none"
           value={comment}
-          maxLength="200"
+          maxLength="280"
           placeholder="Add a comment..."
           onChange={(e) => setComment(e.target.value)}
         ></textarea>
