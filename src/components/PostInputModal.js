@@ -12,7 +12,7 @@ const initialTextAreaHeight = "5rem";
 
 export const PostInputModal = () => {
   const { selectedPost } = useModal();
-  const [postContent, setPostContent] = useState("" || selectedPost?.content);
+  const [postContent, setPostContent] = useState(selectedPost?.content || "");
   const [files, setFiles] = useState([]);
   const { creatingPost } = usePosts();
   const textAreaRef = useAutoResize(postContent, initialTextAreaHeight);
