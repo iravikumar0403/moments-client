@@ -1,5 +1,5 @@
-import { ProfileDetails, ProfileTabs } from "components";
-import { useAuth } from "hooks/selectors";
+import { Loader, ProfileDetails, ProfileTabs } from "components";
+import { useAuth, useProfile } from "hooks/selectors";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useParams } from "react-router-dom";
@@ -9,8 +9,8 @@ export const Profile = () => {
   const { username } = useParams();
   const { user } = useAuth();
   const dispatch = useDispatch();
+  const { loading, userProfile } = useProfile();
 
-  console.log(user, username);
   useEffect(() => {
     if (!username) {
       dispatch(getUserByUsername(user.username));
@@ -19,8 +19,15 @@ export const Profile = () => {
     }
   }, [dispatch, user, username]);
 
+  if (loading || !userProfile)
+    return (
+      <div className=" mt-52 flex items-center justify-center ">
+        <Loader />
+      </div>
+    );
+
   return (
-    <div className="bg-white min-h-[85vh] rounded min-w-[24rem] dark:bg-slate-800">
+    <div className="min-h-[85vh] rounded min-w-[24rem] ">
       <ProfileDetails />
       <ProfileTabs />
       <Outlet />

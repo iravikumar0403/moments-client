@@ -16,10 +16,23 @@ export const getUserByUsername = createAsyncThunk(
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/user/${username}`
       );
-      console.log(data);
       return data;
     } catch (error) {
       toast.error("Something went wrong");
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
+export const getPostsByUser = createAsyncThunk(
+  "profile/getPostsByUser",
+  async (user_id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/user/posts/${user_id}`
+      );
+      return data;
+    } catch (error) {
       return rejectWithValue(error.response.message);
     }
   }
@@ -35,6 +48,13 @@ const profileSlice = createSlice({
     [getUserByUsername.fulfilled]: (state, action) => {
       state.userProfile = action.payload;
       state.loading = false;
+    },
+    [getPostsByUser.pending]: (state) => {
+      state.postLoading = true;
+    },
+    [getPostsByUser.fulfilled]: (state, action) => {
+      state.userPosts = action.payload;
+      state.postLoading = false;
     },
   },
 });

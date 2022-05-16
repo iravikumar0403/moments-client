@@ -1,20 +1,13 @@
-import { Loader } from "./Loader";
 import { Avatar } from "./Avatar";
 import { BsGlobe } from "react-icons/bs";
 import { useAuth, useProfile } from "hooks/selectors";
 
 export const ProfileDetails = () => {
-  const { loading, userProfile } = useProfile();
+  const { userProfile } = useProfile();
   const { user } = useAuth();
-  if (loading || !userProfile)
-    return (
-      <div className="flex items-center justify-center">
-        <Loader />
-      </div>
-    );
 
   return (
-    <div className="flex flex-col vw-full border-b">
+    <div className="bg-white flex flex-col vw-full border-b dark:bg-slate-800">
       <div>
         <img
           className="w-full rounded max-h-36 w-full object-cover"

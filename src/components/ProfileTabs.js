@@ -2,12 +2,15 @@ import { useProfile } from "hooks/selectors";
 import { NavLink } from "react-router-dom";
 
 export const ProfileTabs = () => {
-  const { userProfile } = useProfile();
+  const { userProfile, userPosts } = useProfile();
+  if (!userProfile) {
+    return;
+  }
 
   return (
-    <div className="flex border-b text-center">
+    <div className="bg-white flex border-b text-center dark:bg-slate-800">
       <NavLink to={`/profile/${userProfile.username}`} className="grow py-3">
-        Posts (23)
+        Posts ({userPosts.length})
       </NavLink>
       <NavLink
         to={`/profile/${userProfile.username}/followers`}

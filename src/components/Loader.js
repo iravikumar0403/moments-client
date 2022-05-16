@@ -1,7 +1,7 @@
 export const Loader = ({ size = "lg" }) => {
   const className = {
     sm: "w-4 h-4 mx-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600",
-    lg: "w-12 h-12 mt-52 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600",
+    lg: "w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600",
   };
   return (
     <svg
