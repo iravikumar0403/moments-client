@@ -1,4 +1,10 @@
-import { Layout, RequireAuth } from "components";
+import {
+  Followers,
+  Following,
+  Layout,
+  RequireAuth,
+  UserPosts,
+} from "components";
 import {
   Bookmarks,
   Explore,
@@ -50,10 +56,30 @@ export const routes = [
           {
             path: "/profile",
             element: <Profile />,
+            children: [
+              {
+                index: true,
+                element: <UserPosts />,
+              },
+            ],
           },
           {
             path: "/profile/:username",
             element: <Profile />,
+            children: [
+              {
+                index: true,
+                element: <UserPosts />,
+              },
+              {
+                path: "/profile/:username/followers",
+                element: <Followers />,
+              },
+              {
+                path: "/profile/:username/following",
+                element: <Following />,
+              },
+            ],
           },
         ],
       },
