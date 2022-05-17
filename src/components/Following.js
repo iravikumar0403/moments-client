@@ -5,7 +5,7 @@ export const Following = () => {
   const { userProfile } = useProfile();
 
   return userProfile.following.map((user) => (
-    <div className="flex items-center justify-between bg-white rounded my-2 px-4 py-2 dark:bg-slate-800">
+    <div className="flex items-center justify-between bg-white shadow rounded my-2 px-4 py-2 dark:bg-slate-800">
       <div className="flex items-center">
         <Avatar profile={user.avatar} name={user.firstname} />
         <div className="px-3">

@@ -1,13 +1,37 @@
+import { useState } from "react";
 import { Avatar } from "./Avatar";
 import { BsGlobe } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { ButtonWithLoader } from "./ButtonWithLoader";
 import { useAuth, useProfile } from "hooks/selectors";
+import { followUser, unfollowerUser } from "redux/features/profileSlice";
+import { addFollowing, removeFollowing } from "redux/features/userSlice";
 
 export const ProfileDetails = () => {
   const { userProfile } = useProfile();
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleFollow = async () => {
+    setLoading(true);
+    const thunkData = await dispatch(followUser(userProfile._id));
+    await dispatch(addFollowing(thunkData.payload));
+    setLoading(false);
+  };
+
+  const handleUnfollow = async () => {
+    setLoading(true);
+    const thunkData = await dispatch(unfollowerUser(userProfile._id));
+    await dispatch(removeFollowing(thunkData.payload));
+    setLoading(false);
+  };
+
+  const isFollowed = (user, id_to_check) =>
+    user.following.find((followingUser) => followingUser._id === id_to_check);
 
   return (
-    <div className="mx-2 md:mx-0 bg-white flex flex-col vw-full border-b dark:bg-slate-800">
+    <div className="mx-2 md:mx-0 shadow bg-white flex flex-col vw-full border-b dark:bg-slate-800">
       <div>
         <img
           className="w-full rounded max-h-36 w-full object-cover"
@@ -25,8 +49,22 @@ export const ProfileDetails = () => {
         </div>
         {userProfile.username === user.username ? (
           <button className="btn-primary px-4 mx-4">Edit Profile</button>
+        ) : isFollowed(user, userProfile._id) ? (
+          <ButtonWithLoader
+            isLoading={loading}
+            className="btn-primary px-4 mx-4"
+            onClick={handleUnfollow}
+          >
+            Unfollow
+          </ButtonWithLoader>
         ) : (
-          <button className="btn-primary px-4 mx-4">Follow</button>
+          <ButtonWithLoader
+            isLoading={loading}
+            className="btn-primary px-4 mx-4"
+            onClick={handleFollow}
+          >
+            Follow
+          </ButtonWithLoader>
         )}
       </div>
       <p className="text-3xl px-4 mt-2">

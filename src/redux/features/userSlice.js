@@ -44,6 +44,21 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const syncUserData = createAsyncThunk(
+  "user/sync",
+  async (username, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/user/${username}`
+      );
+      return data;
+    } catch (error) {
+      toast.error("Something went wrong");
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -55,6 +70,14 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.user = action.payload;
+    },
+    addFollowing: (state, action) => {
+      state.user.following = [...state.user.following, action.payload];
+    },
+    removeFollowing: (state, action) => {
+      state.user.following = state.user.following.filter(
+        (each) => each._id !== action.payload._id
+      );
     },
   },
   extraReducers: {
@@ -82,8 +105,12 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    [syncUserData.fulfilled]: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+    },
   },
 });
 
-export const { loginFromLocal, logout } = userSlice.actions;
+export const { loginFromLocal, logout, addFollowing, removeFollowing } =
+  userSlice.actions;
 export default userSlice.reducer;
