@@ -44,11 +44,5 @@ export const UserPosts = () => {
     );
   }
 
-  return (
-    <div className="bg-slate-100">
-      {userPosts.map((post) => (
-        <PostCard post={post} key={post._id} />
-      ))}
-    </div>
-  );
+  return userPosts.map((post) => <PostCard post={post} key={post._id} />);
 };
