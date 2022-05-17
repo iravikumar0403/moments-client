@@ -7,7 +7,7 @@ export const ProfileDetails = () => {
   const { user } = useAuth();
 
   return (
-    <div className="bg-white flex flex-col vw-full border-b dark:bg-slate-800">
+    <div className="mx-2 md:mx-0 bg-white flex flex-col vw-full border-b dark:bg-slate-800">
       <div>
         <img
           className="w-full rounded max-h-36 w-full object-cover"

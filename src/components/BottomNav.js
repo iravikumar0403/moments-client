@@ -5,8 +5,10 @@ import { MdExplore } from "react-icons/md";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { showModal } from "redux/features/modalSlice";
 import { useDispatch } from "react-redux";
+import { useAuth } from "hooks/selectors";
 
 export const BottomNav = () => {
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   return (
@@ -40,7 +42,7 @@ export const BottomNav = () => {
           <FaBell size={25} />
         </NavLink>
         <NavLink
-          to="/profile"
+          to={`/profile/${user.username}`}
           className={({ isActive }) =>
             isActive ? "px-2 text-teal-500" : "px-2"
           }

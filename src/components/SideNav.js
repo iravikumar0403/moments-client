@@ -3,8 +3,10 @@ import { HiHome } from "react-icons/hi";
 import { MdExplore } from "react-icons/md";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { BsBookmarkFill } from "react-icons/bs";
+import { useAuth } from "hooks/selectors";
 
 export const SideNav = () => {
+  const { user } = useAuth();
   const sidebarData = [
     {
       name: "Feed",
@@ -28,7 +30,7 @@ export const SideNav = () => {
     },
     {
       name: "Profile",
-      path: "/profile",
+      path: `/profile/${user.username}`,
       icon: <FaUserCircle size={25} className="mx-3" />,
     },
   ];

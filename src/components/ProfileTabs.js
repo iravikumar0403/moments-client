@@ -8,7 +8,7 @@ export const ProfileTabs = () => {
   }
 
   return (
-    <div className="bg-white flex border-b text-center dark:bg-slate-800">
+    <div className="mx-2 md:mx-0 bg-white flex border-b text-center dark:bg-slate-800">
       <NavLink to={`/profile/${userProfile.username}`} className="grow py-3">
         Posts ({userPosts.length})
       </NavLink>
