@@ -16,7 +16,11 @@ export const Feed = () => {
   }, [dispatch]);
 
   if (loading && allPosts.length === 0) {
-    return <Loader />;
+    return (
+      <div className="flex mt-52 justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return (

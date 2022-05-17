@@ -1,6 +1,20 @@
-import { Layout, RequireAuth } from "components";
-import { Bookmarks, Explore, Feed, Login, Signup } from "pages";
-import { SinglePost } from "../pages/SinglePost";
+import {
+  Followers,
+  Following,
+  Layout,
+  RequireAuth,
+  UserPosts,
+} from "components";
+import {
+  Bookmarks,
+  Explore,
+  Feed,
+  Login,
+  Notifications,
+  Profile,
+  Signup,
+  SinglePost,
+} from "pages";
 
 export const routes = [
   {
@@ -34,6 +48,38 @@ export const routes = [
           {
             path: "/post/:id",
             element: <SinglePost />,
+          },
+          {
+            path: "/notifications",
+            element: <Notifications />,
+          },
+          {
+            path: "/profile",
+            element: <Profile />,
+            children: [
+              {
+                index: true,
+                element: <UserPosts />,
+              },
+            ],
+          },
+          {
+            path: "/profile/:username",
+            element: <Profile />,
+            children: [
+              {
+                index: true,
+                element: <UserPosts />,
+              },
+              {
+                path: "/profile/:username/followers",
+                element: <Followers />,
+              },
+              {
+                path: "/profile/:username/following",
+                element: <Following />,
+              },
+            ],
           },
         ],
       },

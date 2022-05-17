@@ -13,7 +13,11 @@ export const Explore = () => {
   }, [dispatch]);
 
   if (loading && allPosts.length === 0) {
-    return <Loader />;
+    return (
+      <div className="flex mt-52 justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return allPosts.map((post) => <PostCard post={post} key={post._id} />);

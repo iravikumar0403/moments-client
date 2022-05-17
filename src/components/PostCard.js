@@ -23,7 +23,10 @@ export const PostCard = ({ post }) => {
         <div className="flex items-center">
           <Avatar profile={post.author.avatar} name={post.author.firstname} />
           <div>
-            <Link to={`profile/${post.author._id}`} className="px-4 text-lg">
+            <Link
+              to={`profile/${post.author.username}`}
+              className="px-4 text-lg"
+            >
               {post.author.firstname + " " + post.author.lastname}
             </Link>
             <div>
