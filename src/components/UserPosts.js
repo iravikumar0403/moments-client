@@ -1,5 +1,5 @@
 import { useProfile } from "hooks/selectors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showModal } from "redux/features/modalSlice";
 import { getPostsByUser } from "redux/features/profileSlice";
@@ -7,18 +7,20 @@ import { Loader } from "./Loader";
 import { PostCard } from "./PostCard";
 
 export const UserPosts = () => {
-  const { postLoading, userProfile, userPosts } = useProfile();
+  const [loading, setLoading] = useState(true);
+  const { userProfile, userPosts } = useProfile();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userProfile) dispatch(getPostsByUser(userProfile._id));
+    if (userProfile)
+      dispatch(getPostsByUser(userProfile._id)).then(() => setLoading(false));
   }, [dispatch, userProfile]);
 
   if (!userProfile) {
     return;
   }
 
-  if (postLoading && userProfile) {
+  if (loading && userProfile) {
     return (
       <div className="flex justify-center mt-14">
         <Loader />
