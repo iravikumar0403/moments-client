@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRoutes } from "react-router-dom";
 import { loginFromLocal, syncUserData } from "redux/features/userSlice";
-import { Navbar, PostInputModal, Toast } from "components";
+import { FAB, Navbar, PostInputModal, Toast } from "components";
 import { useAuth, useModal } from "hooks/selectors";
 import { routes } from "config/routes";
 import jwtDecode from "jwt-decode";
@@ -51,6 +51,7 @@ const App = () => {
       {isVisible && <PostInputModal />}
       {routesEl}
       <Toast />
+      <FAB />
     </div>
   );
 };
