@@ -13,7 +13,11 @@ export const Bookmarks = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <Loader />;
+    return (
+      <div className="flex mt-52 justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   if (bookmarks.length === 0) {
