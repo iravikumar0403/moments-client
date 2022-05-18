@@ -52,7 +52,7 @@ export const ProfileDetails = () => {
         ) : isFollowed(user, userProfile._id) ? (
           <ButtonWithLoader
             isLoading={loading}
-            className="btn-primary px-4 mx-4"
+            className="btn-primary px-4 mx-4 flex items-center"
             onClick={handleUnfollow}
           >
             Unfollow
@@ -60,7 +60,7 @@ export const ProfileDetails = () => {
         ) : (
           <ButtonWithLoader
             isLoading={loading}
-            className="btn-primary px-4 mx-4"
+            className="btn-primary px-4 mx-4 flex items-center"
             onClick={handleFollow}
           >
             Follow
