@@ -40,7 +40,7 @@ export const Suggestions = () => {
         </p>
       )}
       {suggestions.map(({ avatar, firstname, lastname, username }) => (
-        <Link to={`/profile/${username}`} className="flex py-2">
+        <Link to={`/profile/${username}`} className="flex py-2" key={username}>
           <Avatar profile={avatar} name={firstname} />
           <div className="px-4">
             <p>
