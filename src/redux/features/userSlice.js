@@ -63,7 +63,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout: (state) => {
+    logoutUser: (state) => {
       state = initialState;
     },
     loginFromLocal: (state, action) => {
@@ -111,6 +111,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { loginFromLocal, logout, addFollowing, removeFollowing } =
+export const { loginFromLocal, logoutUser, addFollowing, removeFollowing } =
   userSlice.actions;
 export default userSlice.reducer;
