@@ -45,7 +45,7 @@ export const Navbar = () => {
         <div className="flex">
           {user && (
             <button
-              className="flex px-4 items-center btn-secondary text-red-500 border-red-500 hover:bg-red-400 hover:text-black"
+              className="flex px-4 items-center btn-secondary text-red-500 border-red-500 dark:border-red-500 dark:hover:border-red-500 hover:bg-red-400 hover:text-black dark:hover:bg-red-400 dark:hover:text-black"
               onClick={logout}
             >
               <MdOutlineLogout className="mr-4" />
