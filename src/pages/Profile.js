@@ -27,7 +27,7 @@ export const Profile = () => {
     );
 
   return (
-    <div className="min-h-[85vh] rounded min-w-[24rem] ">
+    <div className="min-h-[85vh] rounded">
       <ProfileDetails />
       <ProfileTabs />
       <Outlet />
