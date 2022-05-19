@@ -155,7 +155,7 @@ export const Signup = () => {
               </div>
             </div>
             <ButtonWithLoader
-              className="flex items-center btn-primary my-2"
+              className="flex items-center justify-center btn-primary my-2"
               type="submit"
               value="Signup"
               isLoading={isLoading}

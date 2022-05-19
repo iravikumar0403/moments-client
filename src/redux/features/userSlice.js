@@ -80,7 +80,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state) => {
-      state = initialState;
+      state.isLoading = false;
+      state.error = null;
+      state.user = null;
     },
     loginFromLocal: (state, action) => {
       state.isLoading = false;
