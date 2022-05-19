@@ -70,7 +70,7 @@ export const ProfileDetails = () => {
       <p className="text-3xl px-4 mt-2">
         {userProfile.firstname} {userProfile.lastname}
       </p>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-col md:flex-row mr-10">
         <p className="text-slate-500 px-4 dark:text-slate-400 grow-1">
           @{userProfile.username}
         </p>
