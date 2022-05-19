@@ -30,7 +30,11 @@ export const BottomNav = () => {
         >
           <MdExplore size={25} />
         </NavLink>
-        <button to="/" className="px-2" onClick={() => dispatch(showModal())}>
+        <button
+          to="/"
+          className="px-2"
+          onClick={() => dispatch(showModal({ type: "post" }))}
+        >
           <BsPlusCircle size={35} />
         </button>
         <NavLink

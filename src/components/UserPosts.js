@@ -36,7 +36,7 @@ export const UserPosts = () => {
         </p>
         <button
           className="btn-primary px-5"
-          onClick={() => dispatch(showModal())}
+          onClick={() => dispatch(showModal({ type: "post" }))}
         >
           Share a moment
         </button>

@@ -30,7 +30,7 @@ export const Feed = () => {
           <Avatar profile={user.avatar} name={user.firstname} />
           <button
             className="rounded-full w-full bg-slate-100 text-left ml-2 px-5 text-gray-500 dark:bg-slate-700 dark:text-gray-200"
-            onClick={() => dispatch(showModal())}
+            onClick={() => dispatch(showModal({ type: "post" }))}
           >
             Start a post
           </button>
