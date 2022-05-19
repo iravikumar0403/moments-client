@@ -17,7 +17,11 @@ export const SinglePost = () => {
   const { loading, commentLoading, currentPost } = usePosts();
   const [comment, setComment] = useState("");
   const textAreaRef = useAutoResize(comment, initialTextAreaHeight);
-  useDocumentTitle(`${currentPost.author.firstname} / Moments`);
+  useDocumentTitle(
+    currentPost?.author?.firstname
+      ? `${currentPost.author.firstname} / Moments`
+      : ""
+  );
 
   useEffect(() => {
     dispatch(getPostById(params.id));
