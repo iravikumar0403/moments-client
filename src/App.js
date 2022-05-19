@@ -9,9 +9,11 @@ import jwtDecode from "jwt-decode";
 import axios from "axios";
 import { useScrollToTop } from "hooks/useScrollToTop";
 import { USER } from "utils/constants";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 const App = () => {
   useScrollToTop();
+  useDocumentTitle();
   const routesEl = useRoutes(routes);
   const dispatch = useDispatch();
   const { user } = useAuth();

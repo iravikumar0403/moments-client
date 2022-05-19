@@ -5,8 +5,10 @@ import { useAuth, usePosts } from "hooks/selectors";
 import { getAllPosts, getBookmarks } from "redux/features/postSlice";
 import { showModal } from "redux/features/modalSlice";
 import { POST } from "utils/constants";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 export const Feed = () => {
+  useDocumentTitle("Home / Moments");
   const { loading, creatingPost, allPosts } = usePosts();
   const { user } = useAuth();
   const dispatch = useDispatch();

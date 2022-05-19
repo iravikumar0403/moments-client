@@ -5,6 +5,7 @@ import { signupValidationSchema } from "utils/validationSchema";
 import { signup } from "redux/features/userSlice";
 import { useAuth } from "hooks/selectors";
 import { ButtonWithLoader } from "components";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 const formInitialValues = {
   email: "",
@@ -17,6 +18,7 @@ const formInitialValues = {
 };
 
 export const Signup = () => {
+  useDocumentTitle("Signup / Moments");
   const dispatch = useDispatch();
   const location = useLocation();
   const { isLoading, user } = useAuth();

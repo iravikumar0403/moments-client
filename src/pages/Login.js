@@ -5,6 +5,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { loginValidationSchema } from "utils/validationSchema";
 import { useAuth } from "hooks/selectors";
 import { ButtonWithLoader } from "components";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 const initialFormValues = {
   email: "",
@@ -12,6 +13,7 @@ const initialFormValues = {
 };
 
 export const Login = () => {
+  useDocumentTitle("Login / Moments");
   const dispatch = useDispatch();
   const location = useLocation();
 
