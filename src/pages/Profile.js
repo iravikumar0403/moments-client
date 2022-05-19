@@ -1,23 +1,20 @@
-import { Loader, ProfileDetails, ProfileTabs } from "components";
-import { useAuth, useProfile } from "hooks/selectors";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useProfile } from "hooks/selectors";
 import { Outlet, useParams } from "react-router-dom";
 import { getUserByUsername } from "redux/features/profileSlice";
+import { Loader, ProfileDetails, ProfileTabs } from "components";
 
 export const Profile = () => {
   const { username } = useParams();
-  const { user } = useAuth();
   const dispatch = useDispatch();
   const { loading, userProfile } = useProfile();
 
   useEffect(() => {
-    if (!username) {
-      dispatch(getUserByUsername(user.username));
-    } else {
+    if (userProfile?.username !== username) {
       dispatch(getUserByUsername(username));
     }
-  }, [dispatch, user, username]);
+  }, [dispatch, userProfile, username]);
 
   if (loading || !userProfile)
     return (
@@ -27,7 +24,7 @@ export const Profile = () => {
     );
 
   return (
-    <div className="min-h-[85vh] rounded min-w-[24rem] ">
+    <div className="min-h-[85vh] rounded">
       <ProfileDetails />
       <ProfileTabs />
       <Outlet />

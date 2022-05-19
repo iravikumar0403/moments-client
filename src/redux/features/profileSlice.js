@@ -6,7 +6,6 @@ const initialState = {
   userProfile: null,
   userPosts: [],
   loading: false,
-  postLoading: false,
 };
 
 export const getUserByUsername = createAsyncThunk(
@@ -38,6 +37,38 @@ export const getPostsByUser = createAsyncThunk(
   }
 );
 
+export const followUser = createAsyncThunk(
+  "profile/followUser",
+  async (user_id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}/user/follow`,
+        data: { user_to_follow: user_id },
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
+export const unfollowerUser = createAsyncThunk(
+  "profile/unfollowUser",
+  async (user_id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}/user/unfollow`,
+        data: { user_to_unfollow: user_id },
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: "profile",
   initialState,
@@ -49,12 +80,14 @@ const profileSlice = createSlice({
       state.userProfile = action.payload;
       state.loading = false;
     },
-    [getPostsByUser.pending]: (state) => {
-      state.postLoading = true;
-    },
     [getPostsByUser.fulfilled]: (state, action) => {
       state.userPosts = action.payload;
-      state.postLoading = false;
+    },
+    [followUser.fulfilled]: (state, action) => {
+      state.userProfile = action.payload;
+    },
+    [unfollowerUser.fulfilled]: (state, action) => {
+      state.userProfile = action.payload;
     },
   },
 });
