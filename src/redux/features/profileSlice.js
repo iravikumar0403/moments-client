@@ -10,7 +10,9 @@ const initialState = {
 
 export const getUserByUsername = createAsyncThunk(
   "profile/getUserByUsername",
-  async (username, { rejectWithValue }) => {
+  async (username, { rejectWithValue, getState }) => {
+    const loggedInUser = getState().user.user;
+    if (loggedInUser.username === username) return loggedInUser;
     try {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/user/${username}`

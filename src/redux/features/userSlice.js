@@ -59,6 +59,22 @@ export const syncUserData = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "user/updateProfile",
+  async (userdetails, { rejectWithValue }) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}/user/update`,
+        data: userdetails,
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -107,6 +123,9 @@ const userSlice = createSlice({
     },
     [syncUserData.fulfilled]: (state, action) => {
       state.user = { ...state.user, ...action.payload };
+    },
+    [updateProfile.fulfilled]: (state, action) => {
+      state.user = action.payload;
     },
   },
 });

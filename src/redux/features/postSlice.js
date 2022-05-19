@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { uploadImage } from "utils/uploadImage";
 import { toast } from "react-toastify";
 import axios from "axios";
 const { REACT_APP_API_URL } = process.env;
@@ -34,23 +35,7 @@ export const addPost = createAsyncThunk("posts/addPost", async (post) => {
       images: [],
     };
     if (post.images) {
-      const fileData = new FormData();
-      fileData.append("file", post.images);
-      fileData.append("upload_preset", "w1pwqcqw");
-      const {
-        data: { secure_url },
-      } = await axios({
-        transformRequest: [
-          (data, headers) => {
-            delete headers.common.Authorization;
-            return data;
-          },
-        ],
-        method: "POST",
-        url: "https://api.cloudinary.com/v1_1/moments-social/image/upload",
-        data: fileData,
-      });
-      postData.images = [secure_url];
+      postData.images = await uploadImage(post.images);
     }
     const { data } = await axios({
       url: `${REACT_APP_API_URL}/posts`,

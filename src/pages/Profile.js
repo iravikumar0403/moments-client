@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useProfile } from "hooks/selectors";
+import { useAuth, useProfile } from "hooks/selectors";
 import { Outlet, useParams } from "react-router-dom";
 import { getUserByUsername } from "redux/features/profileSlice";
 import { Loader, ProfileDetails, ProfileTabs } from "components";
 
 export const Profile = () => {
   const { username } = useParams();
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { loading, userProfile } = useProfile();
 
@@ -15,6 +16,10 @@ export const Profile = () => {
       dispatch(getUserByUsername(username));
     }
   }, [dispatch, userProfile, username]);
+
+  useEffect(() => {
+    dispatch(getUserByUsername(username));
+  }, [dispatch, user, username]);
 
   if (loading || !userProfile)
     return (

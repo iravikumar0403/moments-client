@@ -20,7 +20,7 @@ export const UserPosts = () => {
     return;
   }
 
-  if (loading && userProfile) {
+  if (loading && userPosts.length === 0) {
     return (
       <div className="flex justify-center mt-14">
         <Loader />

@@ -22,3 +22,13 @@ export const loginValidationSchema = Yup.object({
   email: Yup.string().required("Required").email(),
   password: Yup.string().required("Required").min(6, "Invalid password"),
 });
+
+export const profileValidationSchema = Yup.object({
+  email: Yup.string().required("Required").email(),
+  firstname: Yup.string()
+    .required("Required")
+    .max(35, "Max 35 characters only"),
+  lastname: Yup.string().required("Required").max(35, "Max 35 characters only"),
+  bio: Yup.string().max(100, "Max 100 characters only"),
+  website: Yup.string().url(),
+});
