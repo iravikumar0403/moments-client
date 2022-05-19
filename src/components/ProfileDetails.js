@@ -7,6 +7,7 @@ import { useAuth, useProfile } from "hooks/selectors";
 import { followUser, unfollowerUser } from "redux/features/profileSlice";
 import { addFollowing, removeFollowing } from "redux/features/userSlice";
 import { showModal } from "redux/features/modalSlice";
+import { HiPencilAlt } from "react-icons/hi";
 
 export const ProfileDetails = () => {
   const { userProfile } = useProfile();
@@ -33,15 +34,24 @@ export const ProfileDetails = () => {
 
   return (
     <div className="mx-2 md:mx-0 shadow bg-white flex flex-col vw-full border-b dark:bg-slate-800">
-      <div>
+      <div className="relative">
         <img
           className="w-full rounded max-h-36 w-full object-cover"
           src={userProfile.cover}
           alt="cover_pic"
         />
+        {userProfile.username === user.username && (
+          <button
+            className="m-2 p-2 absolute bottom-0 right-0 hover:bg-slate-500 rounded-full"
+            title="Edit cover image"
+            onClick={() => dispatch(showModal({ type: "cover" }))}
+          >
+            <HiPencilAlt size="1.2rem" className="text-teal-100" />
+          </button>
+        )}
       </div>
       <div className="flex justify-between items-center">
-        <div className="-mt-16 mx-2 border-4 border-white dark:border-slate-900 rounded-full">
+        <div className="-mt-16 mx-2 border-4 border-white dark:border-slate-900 rounded-full z-10">
           <Avatar
             profile={userProfile.avatar}
             name={userProfile.firstname}

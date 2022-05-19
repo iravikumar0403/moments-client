@@ -2,6 +2,8 @@ export { Avatar } from "./Avatar";
 export { BottomNav } from "./BottomNav";
 export { ButtonWithLoader } from "./ButtonWithLoader";
 export { Comment } from "./Comment";
+export { EditCoverModal } from "./EditCoverModal";
+export { EditProfileModal } from "./EditProfileModal";
 export { FAB } from "./FAB";
 export { Followers } from "./Followers";
 export { Following } from "./Following";
