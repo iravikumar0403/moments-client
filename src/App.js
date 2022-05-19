@@ -8,6 +8,7 @@ import { routes } from "config/routes";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 import { useScrollToTop } from "hooks/useScrollToTop";
+import { USER } from "utils/constants";
 
 const App = () => {
   useScrollToTop();
@@ -17,7 +18,7 @@ const App = () => {
 
   useEffect(() => {
     if (!user) {
-      const userString = localStorage.getItem("user");
+      const userString = localStorage.getItem(USER);
       if (userString) {
         const user = JSON.parse(userString);
         try {

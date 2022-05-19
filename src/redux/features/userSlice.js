@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { USER } from "utils/constants";
 
 const initialState = {
   isLoading: false,
@@ -18,7 +19,7 @@ export const login = createAsyncThunk(
         ...creds,
       });
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem(USER, JSON.stringify(data));
       return data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -35,7 +36,7 @@ export const signup = createAsyncThunk(
         ...userdetails,
       });
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem(USER, JSON.stringify(data));
       return data;
     } catch (error) {
       toast.error(error.response.data.message);

@@ -8,6 +8,7 @@ import { followUser, unfollowerUser } from "redux/features/profileSlice";
 import { addFollowing, removeFollowing } from "redux/features/userSlice";
 import { showModal } from "redux/features/modalSlice";
 import { HiPencilAlt } from "react-icons/hi";
+import { COVER, PROFILE } from "utils/constants";
 
 export const ProfileDetails = () => {
   const { userProfile } = useProfile();
@@ -44,7 +45,7 @@ export const ProfileDetails = () => {
           <button
             className="m-2 p-2 absolute bottom-0 right-0 hover:bg-slate-500 rounded-full"
             title="Edit cover image"
-            onClick={() => dispatch(showModal({ type: "cover" }))}
+            onClick={() => dispatch(showModal({ type: COVER }))}
           >
             <HiPencilAlt size="1.2rem" className="text-teal-100" />
           </button>
@@ -61,7 +62,7 @@ export const ProfileDetails = () => {
         {userProfile.username === user.username ? (
           <button
             className="btn-primary px-4 mx-4"
-            onClick={() => dispatch(showModal({ type: "profile" }))}
+            onClick={() => dispatch(showModal({ type: PROFILE }))}
           >
             Edit Profile
           </button>

@@ -40,7 +40,15 @@ export const EditCoverModal = () => {
         />
       </div>
       <div className="flex flex-row-reverse">
-        {!file ? (
+        {file ? (
+          <ButtonWithLoader
+            isLoading={isLoading}
+            className="btn-primary px-4 ml-4 flex items-center"
+            onClick={updateCoverImage}
+          >
+            Upload Image
+          </ButtonWithLoader>
+        ) : (
           <>
             <label htmlFor="cover" className="btn-primary px-4 mx-2">
               Select Image
@@ -53,14 +61,6 @@ export const EditCoverModal = () => {
               onChange={(e) => setFile(e.target.files[0])}
             />
           </>
-        ) : (
-          <ButtonWithLoader
-            isLoading={isLoading}
-            className="btn-primary px-4 ml-4 flex items-center"
-            onClick={updateCoverImage}
-          >
-            Upload Image
-          </ButtonWithLoader>
         )}
         <button
           className="btn-secondary px-4"
