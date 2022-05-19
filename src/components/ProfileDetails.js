@@ -6,6 +6,7 @@ import { ButtonWithLoader } from "./ButtonWithLoader";
 import { useAuth, useProfile } from "hooks/selectors";
 import { followUser, unfollowerUser } from "redux/features/profileSlice";
 import { addFollowing, removeFollowing } from "redux/features/userSlice";
+import { showModal } from "redux/features/modalSlice";
 
 export const ProfileDetails = () => {
   const { userProfile } = useProfile();
@@ -48,7 +49,12 @@ export const ProfileDetails = () => {
           />
         </div>
         {userProfile.username === user.username ? (
-          <button className="btn-primary px-4 mx-4">Edit Profile</button>
+          <button
+            className="btn-primary px-4 mx-4"
+            onClick={() => dispatch(showModal({ type: "profile" }))}
+          >
+            Edit Profile
+          </button>
         ) : isFollowed(user, userProfile._id) ? (
           <ButtonWithLoader
             isLoading={loading}

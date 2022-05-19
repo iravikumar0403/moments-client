@@ -1,7 +1,6 @@
 import { useModal, usePosts } from "hooks/selectors";
 import { useAutoResize } from "hooks/useAutoResize";
 import { useState } from "react";
-import reactDom from "react-dom";
 import { IoIosClose } from "react-icons/io";
 import { RiImageAddLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
@@ -37,8 +36,14 @@ export const PostInputModal = () => {
     dispatch(closeModal());
   };
 
-  return reactDom.createPortal(
-    <div className="absolute top-0 left-0 h-screen w-full backdrop-blur-sm mt-[8vh] flex justify-center">
+  const handleClick = (e) =>
+    e.target === e.currentTarget && dispatch(closeModal());
+
+  return (
+    <div
+      className="absolute top-0 left-0 h-screen w-full backdrop-blur-sm mt-[8vh] flex justify-center"
+      onClick={handleClick}
+    >
       <div className="p-5 mt-12 bg-white h-max shadow rounded border mx-2 max-w-full w-[30rem] dark:bg-slate-800 dark:text-white">
         <div className="flex justify-between">
           <h2 className="text-xl ">Share a moment</h2>
@@ -92,7 +97,6 @@ export const PostInputModal = () => {
           </div>
         </form>
       </div>
-    </div>,
-    document.body
+    </div>
   );
 };

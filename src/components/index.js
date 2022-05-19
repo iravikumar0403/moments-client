@@ -7,6 +7,7 @@ export { Followers } from "./Followers";
 export { Following } from "./Following";
 export { Layout } from "./Layout";
 export { Loader } from "./Loader";
+export { Modal } from "./Modal";
 export { Navbar } from "./Navbar";
 export { PostCard } from "./PostCard";
 export { PostInputModal } from "./PostInputModal";
