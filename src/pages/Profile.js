@@ -12,14 +12,13 @@ export const Profile = () => {
   const { loading, userProfile } = useProfile();
 
   useEffect(() => {
-    if (userProfile?.username !== username) {
+    if (
+      userProfile?.username !== username ||
+      user.username === userProfile.username
+    ) {
       dispatch(getUserByUsername(username));
     }
-  }, [dispatch, userProfile, username]);
-
-  useEffect(() => {
-    dispatch(getUserByUsername(username));
-  }, [dispatch, user, username]);
+  }, [dispatch, user, userProfile, username]);
 
   if (loading || !userProfile)
     return (
