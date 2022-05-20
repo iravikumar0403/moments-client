@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useAuth, usePosts } from "hooks/selectors";
 import { getAllPosts, getBookmarks } from "redux/features/postSlice";
 import { showModal } from "redux/features/modalSlice";
+import { POST } from "utils/constants";
 
 export const Feed = () => {
   const { loading, creatingPost, allPosts } = usePosts();
@@ -30,7 +31,7 @@ export const Feed = () => {
           <Avatar profile={user.avatar} name={user.firstname} />
           <button
             className="rounded-full w-full bg-slate-100 text-left ml-2 px-5 text-gray-500 dark:bg-slate-700 dark:text-gray-200"
-            onClick={() => dispatch(showModal())}
+            onClick={() => dispatch(showModal({ type: POST }))}
           >
             Start a post
           </button>

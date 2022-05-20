@@ -2,6 +2,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
   isVisible: false,
+  type: "",
   selectedPost: null,
 };
 
@@ -11,10 +12,12 @@ const modalSlice = createSlice({
   reducers: {
     showModal: (state, action) => {
       state.isVisible = true;
-      if (action.payload) state.selectedPost = action.payload;
+      state.type = action.payload.type;
+      if (action.payload.post) state.selectedPost = action.payload.post;
     },
     closeModal: (state) => {
       state.isVisible = false;
+      state.type = "";
       state.selectedPost = null;
     },
   },

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showModal } from "redux/features/modalSlice";
 import { getPostsByUser } from "redux/features/profileSlice";
+import { POST } from "utils/constants";
 import { Loader } from "./Loader";
 import { PostCard } from "./PostCard";
 
@@ -20,7 +21,7 @@ export const UserPosts = () => {
     return;
   }
 
-  if (loading && userProfile) {
+  if (loading && userPosts.length === 0) {
     return (
       <div className="flex justify-center mt-14">
         <Loader />
@@ -36,7 +37,7 @@ export const UserPosts = () => {
         </p>
         <button
           className="btn-primary px-5"
-          onClick={() => dispatch(showModal())}
+          onClick={() => dispatch(showModal({ type: POST }))}
         >
           Share a moment
         </button>

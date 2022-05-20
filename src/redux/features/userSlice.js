@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { USER } from "utils/constants";
 
 const initialState = {
   isLoading: false,
@@ -18,7 +19,7 @@ export const login = createAsyncThunk(
         ...creds,
       });
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem(USER, JSON.stringify(data));
       return data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -35,7 +36,7 @@ export const signup = createAsyncThunk(
         ...userdetails,
       });
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem(USER, JSON.stringify(data));
       return data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -59,12 +60,30 @@ export const syncUserData = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "user/updateProfile",
+  async (userdetails, { rejectWithValue }) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_API_URL}/user/update`,
+        data: userdetails,
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     logoutUser: (state) => {
-      state = initialState;
+      state.isLoading = false;
+      state.error = null;
+      state.user = null;
     },
     loginFromLocal: (state, action) => {
       state.isLoading = false;
@@ -107,6 +126,9 @@ const userSlice = createSlice({
     },
     [syncUserData.fulfilled]: (state, action) => {
       state.user = { ...state.user, ...action.payload };
+    },
+    [updateProfile.fulfilled]: (state, action) => {
+      state.user = action.payload;
     },
   },
 });

@@ -6,6 +6,7 @@ import { FaBell, FaUserCircle } from "react-icons/fa";
 import { showModal } from "redux/features/modalSlice";
 import { useDispatch } from "react-redux";
 import { useAuth } from "hooks/selectors";
+import { POST } from "utils/constants";
 
 export const BottomNav = () => {
   const { user } = useAuth();
@@ -30,7 +31,11 @@ export const BottomNav = () => {
         >
           <MdExplore size={25} />
         </NavLink>
-        <button to="/" className="px-2" onClick={() => dispatch(showModal())}>
+        <button
+          to="/"
+          className="px-2"
+          onClick={() => dispatch(showModal({ type: POST }))}
+        >
           <BsPlusCircle size={35} />
         </button>
         <NavLink

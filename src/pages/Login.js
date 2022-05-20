@@ -23,10 +23,12 @@ export const Login = () => {
 
   const handleTestLogin = () => {
     dispatch(
-      login({ email: "adarshbalak@moments.com", password: "adarshbalak" })
+      login({
+        email: process.env.REACT_APP_TEST_EMAIL,
+        password: process.env.REACT_APP_TEST_PASSWORD,
+      })
     );
   };
-
   if (user) {
     return <Navigate to={location.state?.from?.pathname || "/"} replace />;
   }
