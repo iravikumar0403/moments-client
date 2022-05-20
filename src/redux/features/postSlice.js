@@ -6,8 +6,7 @@ const { REACT_APP_API_URL } = process.env;
 
 const initialState = {
   loading: false,
-  allPosts: [],
-  userPost: [],
+  posts: [],
   bookmarks: [],
   creatingPost: false,
   currentPost: null,
@@ -20,6 +19,19 @@ export const getAllPosts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${REACT_APP_API_URL}/posts`);
+      return data;
+    } catch (error) {
+      toast.error("Failed to fetch post");
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getFeedPosts = createAsyncThunk(
+  "posts/getFeedPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`${REACT_APP_API_URL}/posts/feed`);
       return data;
     } catch (error) {
       toast.error("Failed to fetch post");
@@ -143,7 +155,7 @@ export const getPostById = createAsyncThunk(
   async (post_id, { rejectWithValue, getState }) => {
     try {
       const state = getState();
-      const currentPost = state.posts.allPosts.find(
+      const currentPost = state.posts.posts.find(
         (post) => post._id === post_id
       );
       if (currentPost) {
@@ -171,18 +183,25 @@ const postSlice = createSlice({
     },
     [getAllPosts.fulfilled]: (state, action) => {
       state.loading = false;
-      state.allPosts = action.payload;
+      state.posts = action.payload;
     },
     [getAllPosts.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
+    [getFeedPosts.pending]: (state) => {
+      state.loading = true;
+      state.posts = [];
+    },
+    [getFeedPosts.fulfilled]: (state, action) => {
+      state.posts = action.payload;
+      state.loading = false;
+    },
     [addPost.pending]: (state) => {
       state.creatingPost = true;
     },
     [addPost.fulfilled]: (state, action) => {
-      state.allPosts = [action.payload, ...state.allPosts];
-      state.userPost = [action.payload, ...state.userPost];
+      state.posts = [action.payload, ...state.posts];
       state.creatingPost = false;
     },
     [addPost.rejected]: (state) => {
@@ -193,25 +212,16 @@ const postSlice = createSlice({
     },
     [editPost.fulfilled]: (state, action) => {
       state.creatingPost = false;
-      state.allPosts = [
+      state.posts = [
         action.payload,
-        ...state.allPosts.filter((post) => post._id !== action.payload._id),
-      ];
-      state.userPost = [
-        action.payload,
-        ...state.userPost.filter((post) => post._id !== action.payload._id),
+        ...state.posts.filter((post) => post._id !== action.payload._id),
       ];
     },
     [deletePost.pending]: (state, action) => {
-      state.allPosts = state.allPosts.filter(
-        (post) => post._id !== action.meta.arg
-      );
-      state.userPost = state.userPost.filter(
-        (post) => post._id !== action.meta.arg
-      );
+      state.posts = state.posts.filter((post) => post._id !== action.meta.arg);
     },
     [likePost.pending]: (state, action) => {
-      state.allPosts = state.allPosts.map((post) => {
+      state.posts = state.posts.map((post) => {
         if (post._id === action.meta.arg.post_id) {
           post.likes.includes(action.meta.arg.user_id)
             ? post.likes.pop(action.meta.arg.user_id)
@@ -219,20 +229,9 @@ const postSlice = createSlice({
         }
         return post;
       });
-      state.userPost = state.userPost.map((post) => {
-        if (post._id === action.meta.arg.post_id) {
-          post.likes.includes(action.meta.arg.user_id)
-            ? post.likes.push(action.meta.arg.user_id)
-            : post.likes.pop(action.meta.arg.user_id);
-        }
-        return post;
-      });
     },
     [likePost.fulfilled]: (state, action) => {
-      state.allPosts = state.allPosts.map((post) =>
-        post._id === action.payload._id ? action.payload : post
-      );
-      state.userPost = state.userPost.map((post) =>
+      state.posts = state.posts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
       state.currentPost = action.payload;
@@ -275,10 +274,7 @@ const postSlice = createSlice({
     },
     [addComment.fulfilled]: (state, action) => {
       state.commentLoading = false;
-      state.allPosts = state.allPosts.map((post) =>
-        post._id === action.payload._id ? action.payload : post
-      );
-      state.userPost = state.userPost.map((post) =>
+      state.posts = state.posts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
       state.currentPost = action.payload;

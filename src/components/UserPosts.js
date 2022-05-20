@@ -1,4 +1,4 @@
-import { useProfile } from "hooks/selectors";
+import { useAuth, useProfile } from "hooks/selectors";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showModal } from "redux/features/modalSlice";
@@ -10,6 +10,7 @@ import { PostCard } from "./PostCard";
 export const UserPosts = () => {
   const [loading, setLoading] = useState(true);
   const { userProfile, userPosts } = useProfile();
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,15 +33,23 @@ export const UserPosts = () => {
   if (userPosts.length === 0) {
     return (
       <div className="flex items-center justify-center flex-col">
-        <p className="text-slate-500 my-4 text-sm">
-          You have not shared a moment yet.
-        </p>
-        <button
-          className="btn-primary px-5"
-          onClick={() => dispatch(showModal({ type: POST }))}
-        >
-          Share a moment
-        </button>
+        {userProfile.username === user.username ? (
+          <>
+            <p className="text-slate-500 my-4 text-sm">
+              You have not shared a moment yet.
+            </p>
+            <button
+              className="btn-primary px-5"
+              onClick={() => dispatch(showModal({ type: POST }))}
+            >
+              Share a moment
+            </button>
+          </>
+        ) : (
+          <p className="text-slate-500 my-4 text-sm">
+            {userProfile.firstname} has not shared any posts yet!
+          </p>
+        )}
       </div>
     );
   }

@@ -1,30 +1,23 @@
 import { useEffect } from "react";
-import { Loader, PostCard, PostSkeleton, Avatar } from "components";
+import { PostCard, PostSkeleton, Avatar } from "components";
 import { useDispatch } from "react-redux";
 import { useAuth, usePosts } from "hooks/selectors";
-import { getAllPosts, getBookmarks } from "redux/features/postSlice";
+import { getBookmarks, getFeedPosts } from "redux/features/postSlice";
 import { showModal } from "redux/features/modalSlice";
 import { POST } from "utils/constants";
 import { useDocumentTitle } from "hooks/useDocumentTitle";
+import { Link } from "react-router-dom";
 
 export const Feed = () => {
   useDocumentTitle("Home / Moments");
-  const { loading, creatingPost, allPosts } = usePosts();
+  const { loading, creatingPost, posts } = usePosts();
   const { user } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllPosts());
+    dispatch(getFeedPosts());
     dispatch(getBookmarks());
   }, [dispatch]);
-
-  if (loading && allPosts.length === 0) {
-    return (
-      <div className="flex mt-52 justify-center">
-        <Loader />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -40,9 +33,22 @@ export const Feed = () => {
         </div>
       </div>
       {creatingPost && <PostSkeleton />}
-      {allPosts.map((post) => (
-        <PostCard post={post} key={post._id} />
-      ))}
+      {loading ? (
+        <>
+          <PostSkeleton /> <PostSkeleton />
+        </>
+      ) : posts.length > 0 ? (
+        posts.map((post) => <PostCard post={post} key={post._id} />)
+      ) : (
+        <div className="text-center">
+          <p className="text-center mt-32 text-slate-500">
+            Share your moments and make new friends.
+          </p>
+          <Link to="/explore" className="text-center text-teal-500">
+            Explore moments
+          </Link>
+        </div>
+      )}
     </>
   );
 };
