@@ -102,6 +102,7 @@ export const likePost = createAsyncThunk(
       );
       return data;
     } catch (error) {
+      if (error.response.status === 401) toast.error("You are not logged in");
       return rejectWithValue(error.response.message);
     }
   }
@@ -116,7 +117,8 @@ export const bookmarkPost = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      toast.error("Something went wrong");
+      if (error.response.status === 401) toast.error("You are not logged in");
+      else toast.error("Something went wrong");
       return rejectWithValue(error.response.message);
     }
   }

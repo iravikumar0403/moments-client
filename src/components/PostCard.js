@@ -44,7 +44,7 @@ export const PostCard = ({ post }) => {
             </div>
           </div>
         </div>
-        {user._id === post.author._id && <PostOptions post={post} />}
+        {user?._id === post.author._id && <PostOptions post={post} />}
       </section>
       <section className="px-4 text-justify">
         <p className="py-2">{post.content}</p>
@@ -59,10 +59,10 @@ export const PostCard = ({ post }) => {
               className="p-2 mr-1 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
               title="like"
               onClick={() =>
-                dispatch(likePost({ post_id: post._id, user_id: user._id }))
+                dispatch(likePost({ post_id: post._id, user_id: user?._id }))
               }
             >
-              {post.likes.includes(user._id) ? (
+              {post.likes.includes(user?._id) ? (
                 <AiFillLike className="text-teal-500" />
               ) : (
                 <AiOutlineLike />
