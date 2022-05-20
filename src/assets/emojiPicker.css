@@ -1,0 +1,29 @@
+:root {
+  --slate-700: #334155;
+}
+
+.emoji-container .emoji-picker-react {
+  height: 320px;
+  width: 450px;
+  max-width: 80vw;
+}
+
+.emoji-container .emoji-picker-react .emoji-group:before {
+  content: attr(data-display-name);
+  text-transform: capitalize;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.dark .emoji-container .emoji-picker-react {
+  background: var(--slate-700);
+  box-shadow: 0 5px 10px var(--slate-700);
+}
+
+.dark .emoji-container .emoji-picker-react .emoji-group:before {
+  background: var(--slate-700);
+}
+
+.dark .emoji-container .emoji-picker-react input.emoji-search {
+  background-color: var(--slate-700);
+}

@@ -1,6 +1,8 @@
+import { useState } from "react";
+import EmojiPicker from "emoji-picker-react";
 import { useModal, usePosts } from "hooks/selectors";
 import { useAutoResize } from "hooks/useAutoResize";
-import { useState } from "react";
+import { BsEmojiLaughing } from "react-icons/bs";
 import { IoIosClose } from "react-icons/io";
 import { RiImageAddLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
@@ -13,9 +15,14 @@ export const PostInputModal = () => {
   const { selectedPost } = useModal();
   const [postContent, setPostContent] = useState(selectedPost?.content || "");
   const [files, setFiles] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { creatingPost } = usePosts();
   const textAreaRef = useAutoResize(postContent, initialTextAreaHeight);
   const dispatch = useDispatch();
+
+  const onEmojiClick = (e, emoji) => {
+    setPostContent((prev) => prev + emoji.emoji);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,18 +75,37 @@ export const PostInputModal = () => {
             />
           )}
         </div>
-        <div className="flex justify-between items-center mt-4">
-          {!selectedPost && (
-            <label className="p-2 mr-2 rounded-full block hover:bg-teal-100 hover:text-teal-600">
-              <RiImageAddLine size={"1.2rem"} />
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={(e) => setFiles(e.target.files)}
-              />
-            </label>
-          )}
+        <div className="flex justify-between items-center mt-2">
+          <div className="flex items-center">
+            <div className="relative">
+              <button
+                type="button"
+                className="p-2 px-3 mr-2 rounded-full block hover:bg-teal-100 hover:text-teal-600"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+              >
+                <BsEmojiLaughing />
+              </button>
+              <div
+                className={`${
+                  showEmojiPicker ? "" : "hidden"
+                } absolute emoji-container`}
+              >
+                <EmojiPicker onEmojiClick={onEmojiClick} />
+              </div>
+            </div>
+            {!selectedPost && (
+              <label className="p-2 flex items-center mr-2 rounded-full block hover:bg-teal-100 hover:text-teal-600">
+                <RiImageAddLine size={"1.2rem"} />
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) => setFiles(e.target.files)}
+                />
+                <span className="text-slate-500 mx-2">Photo or GIFs</span>
+              </label>
+            )}
+          </div>
           <button
             disabled={creatingPost}
             className="btn-primary px-5 flex items-center ml-auto"

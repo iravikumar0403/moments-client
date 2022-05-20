@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap");
+@import url(assets/emojiPicker.css);
+@import url(assets/scrollbar.css);
 
 @tailwind base;
 @tailwind components;
