@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Comment, PostCard, PostSkeleton } from "components";
 import { useAutoResize } from "hooks/useAutoResize";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -11,6 +12,9 @@ export const SharedPost = () => {
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const textAreaRef = useAutoResize(comment, initialTextAreaHeight);
+  useDocumentTitle(
+    post?.author?.firstname ? `${post.author.firstname} / Moments` : ""
+  );
 
   useEffect(() => {
     (async () => {

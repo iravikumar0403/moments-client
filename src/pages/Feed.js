@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PostCard, PostSkeleton, Avatar, SortPost } from "components";
 import { useDispatch } from "react-redux";
 import { useAuth, usePosts } from "hooks/selectors";
@@ -8,6 +8,7 @@ import { POST } from "utils/constants";
 import { useDocumentTitle } from "hooks/useDocumentTitle";
 import { Link } from "react-router-dom";
 import { sortPosts } from "utils/sortPosts";
+import { useInfiniteScroll } from "hooks/useInfiniteScroll";
 
 export const Feed = () => {
   useDocumentTitle("Home / Moments");
@@ -15,28 +16,14 @@ export const Feed = () => {
     usePosts();
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const [loaderRef, setLoaderRef] = useState(null);
+  const loadMore = () => feedHasMore && dispatch(getFeedPosts(feedPage + 1));
+  const { setLoaderRef } = useInfiniteScroll(loadMore);
 
   const feed = sortPosts(feedPosts, sortBy);
   useEffect(() => {
     dispatch(getFeedPosts());
     dispatch(getBookmarks());
   }, [dispatch]);
-
-  useEffect(() => {
-    const intersectionObserver = new IntersectionObserver(
-      function (entries) {
-        if (entries[0].intersectionRatio <= 0) return;
-        if (feedHasMore) dispatch(getFeedPosts(feedPage + 1));
-      },
-      {
-        threshold: 0.5,
-      }
-    );
-    loaderRef && intersectionObserver.observe(loaderRef);
-
-    return () => loaderRef && intersectionObserver.unobserve(loaderRef);
-  }, [dispatch, feedHasMore, feedPage, loaderRef]);
 
   return (
     <>
