@@ -28,7 +28,7 @@ const App = () => {
               "Authorization"
             ] = `Bearer ${user.token}`;
             dispatch(loginFromLocal(user));
-            dispatch(syncUserData(user.username));
+            if (user.username) dispatch(syncUserData(user.username));
           }
         } catch (error) {}
       }
