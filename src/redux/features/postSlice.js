@@ -7,7 +7,8 @@ const { REACT_APP_API_URL } = process.env;
 
 const initialState = {
   loading: false,
-  posts: [],
+  explorePosts: [],
+  feedPosts: [],
   bookmarks: [],
   sortBy: LATEST_FIRST,
   creatingPost: false,
@@ -18,9 +19,11 @@ const initialState = {
 
 export const getAllPosts = createAsyncThunk(
   "posts/getAllPosts",
-  async (_, { rejectWithValue }) => {
+  async (page = 0, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${REACT_APP_API_URL}/posts`);
+      const { data } = await axios.get(
+        `${REACT_APP_API_URL}/posts?page=${page}`
+      );
       return data;
     } catch (error) {
       toast.error("Failed to fetch post");
@@ -31,9 +34,11 @@ export const getAllPosts = createAsyncThunk(
 
 export const getFeedPosts = createAsyncThunk(
   "posts/getFeedPosts",
-  async (_, { rejectWithValue }) => {
+  async (page = 0, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${REACT_APP_API_URL}/posts/feed`);
+      const { data } = await axios.get(
+        `${REACT_APP_API_URL}/posts/feed?page=${page}`
+      );
       return data;
     } catch (error) {
       toast.error("Failed to fetch post");
@@ -192,7 +197,12 @@ const postSlice = createSlice({
     },
     [getAllPosts.fulfilled]: (state, action) => {
       state.loading = false;
-      state.posts = action.payload;
+      state.explorePosts =
+        state.explorePage === action.payload.page
+          ? state.explorePosts
+          : [...state.explorePosts, ...action.payload.posts];
+      state.explorePage = action.payload.page;
+      state.exploreHasMore = action.payload.has_more;
     },
     [getAllPosts.rejected]: (state, action) => {
       state.loading = false;
@@ -200,10 +210,14 @@ const postSlice = createSlice({
     },
     [getFeedPosts.pending]: (state) => {
       state.loading = true;
-      state.posts = [];
     },
     [getFeedPosts.fulfilled]: (state, action) => {
-      state.posts = action.payload;
+      state.feedPosts =
+        state.feedPage === action.payload.page
+          ? state.feedPosts
+          : [...state.feedPosts, ...action.payload.posts];
+      state.feedHasMore = action.payload.has_more;
+      state.feedPage = action.payload.page;
       state.loading = false;
     },
     [addPost.pending]: (state) => {

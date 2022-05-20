@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PostCard, PostSkeleton, Avatar, SortPost } from "components";
 import { useDispatch } from "react-redux";
 import { useAuth, usePosts } from "hooks/selectors";
@@ -11,14 +11,32 @@ import { sortPosts } from "utils/sortPosts";
 
 export const Feed = () => {
   useDocumentTitle("Home / Moments");
-  const { loading, creatingPost, posts, sortBy } = usePosts();
+  const { loading, creatingPost, feedPosts, feedHasMore, feedPage, sortBy } =
+    usePosts();
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const feed = sortPosts(posts, sortBy);
+  const [loaderRef, setLoaderRef] = useState(null);
+
+  const feed = sortPosts(feedPosts, sortBy);
   useEffect(() => {
     dispatch(getFeedPosts());
     dispatch(getBookmarks());
   }, [dispatch]);
+
+  useEffect(() => {
+    const intersectionObserver = new IntersectionObserver(
+      function (entries) {
+        if (entries[0].intersectionRatio <= 0) return;
+        if (feedHasMore) dispatch(getFeedPosts(feedPage + 1));
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+    loaderRef && intersectionObserver.observe(loaderRef);
+
+    return () => loaderRef && intersectionObserver.unobserve(loaderRef);
+  }, [dispatch, feedHasMore, feedPage, loaderRef]);
 
   return (
     <>
@@ -35,12 +53,25 @@ export const Feed = () => {
       </div>
       <SortPost />
       {creatingPost && <PostSkeleton />}
-      {loading ? (
+      {loading && feed.length === 0 ? (
         <>
           <PostSkeleton /> <PostSkeleton />
         </>
       ) : feed.length > 0 ? (
-        feed.map((post) => <PostCard post={post} key={post._id} />)
+        <>
+          {feed.map((post) => (
+            <PostCard post={post} key={post._id} />
+          ))}
+          {feedHasMore ? (
+            <div ref={setLoaderRef}>
+              <PostSkeleton />
+            </div>
+          ) : (
+            <p className="text-center text-slate-500">
+              You have reached the end
+            </p>
+          )}
+        </>
       ) : (
         <div className="text-center">
           <p className="text-center mt-32 text-slate-500">
