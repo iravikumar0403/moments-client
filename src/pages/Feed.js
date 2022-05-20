@@ -1,28 +1,20 @@
 import { useEffect } from "react";
-import { Loader, PostCard, PostSkeleton, Avatar } from "components";
+import { PostCard, PostSkeleton, Avatar } from "components";
 import { useDispatch } from "react-redux";
 import { useAuth, usePosts } from "hooks/selectors";
-import { getAllPosts, getBookmarks } from "redux/features/postSlice";
+import { getBookmarks, getFeedPosts } from "redux/features/postSlice";
 import { showModal } from "redux/features/modalSlice";
 import { POST } from "utils/constants";
 
 export const Feed = () => {
-  const { loading, creatingPost, allPosts } = usePosts();
+  const { loading, creatingPost, posts } = usePosts();
   const { user } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllPosts());
+    dispatch(getFeedPosts());
     dispatch(getBookmarks());
   }, [dispatch]);
-
-  if (loading && allPosts.length === 0) {
-    return (
-      <div className="flex mt-52 justify-center">
-        <Loader />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -38,9 +30,13 @@ export const Feed = () => {
         </div>
       </div>
       {creatingPost && <PostSkeleton />}
-      {allPosts.map((post) => (
-        <PostCard post={post} key={post._id} />
-      ))}
+      {loading ? (
+        <>
+          <PostSkeleton /> <PostSkeleton />
+        </>
+      ) : (
+        posts.map((post) => <PostCard post={post} key={post._id} />)
+      )}
     </>
   );
 };
