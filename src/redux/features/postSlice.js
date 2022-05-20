@@ -155,7 +155,7 @@ export const getPostById = createAsyncThunk(
   async (post_id, { rejectWithValue, getState }) => {
     try {
       const state = getState();
-      const currentPost = state.posts.allPosts.find(
+      const currentPost = state.posts.posts.find(
         (post) => post._id === post_id
       );
       if (currentPost) {
@@ -219,9 +219,6 @@ const postSlice = createSlice({
     },
     [deletePost.pending]: (state, action) => {
       state.posts = state.posts.filter((post) => post._id !== action.meta.arg);
-      state.userPost = state.userPost.filter(
-        (post) => post._id !== action.meta.arg
-      );
     },
     [likePost.pending]: (state, action) => {
       state.posts = state.posts.map((post) => {

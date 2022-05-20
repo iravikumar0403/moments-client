@@ -56,7 +56,7 @@ export const PostInputModal = () => {
           {280 - postContent.length} characters remaining
         </span>
         <div>
-          {(files.length || selectedPost?.images) && (
+          {(files.length > 0 || selectedPost?.images > 0) && (
             <img
               className="h-32 mx-auto my-2 rounded"
               src={

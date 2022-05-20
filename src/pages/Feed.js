@@ -5,6 +5,7 @@ import { useAuth, usePosts } from "hooks/selectors";
 import { getBookmarks, getFeedPosts } from "redux/features/postSlice";
 import { showModal } from "redux/features/modalSlice";
 import { POST } from "utils/constants";
+import { Link } from "react-router-dom";
 
 export const Feed = () => {
   const { loading, creatingPost, posts } = usePosts();
@@ -34,8 +35,17 @@ export const Feed = () => {
         <>
           <PostSkeleton /> <PostSkeleton />
         </>
-      ) : (
+      ) : posts.length > 0 ? (
         posts.map((post) => <PostCard post={post} key={post._id} />)
+      ) : (
+        <div className="text-center">
+          <p className="text-center mt-32 text-slate-500">
+            Share your moments and make new friends.
+          </p>
+          <Link to="/explore" className="text-center text-teal-500">
+            Explore moments
+          </Link>
+        </div>
       )}
     </>
   );
