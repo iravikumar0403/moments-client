@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ButtonWithLoader, Comment, Loader, PostCard } from "components";
+import { ButtonWithLoader, Comment, PostCard, PostSkeleton } from "components";
 import { useAuth, usePosts } from "hooks/selectors";
 import { useAutoResize } from "hooks/useAutoResize";
 import { useDispatch } from "react-redux";
@@ -28,7 +28,7 @@ export const SinglePost = () => {
   }, [dispatch, params.id]);
 
   if (loading || !currentPost) {
-    return <Loader />;
+    return <PostSkeleton />;
   }
 
   return (

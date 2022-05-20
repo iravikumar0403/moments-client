@@ -9,6 +9,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useDispatch } from "react-redux";
 import { bookmarkPost, likePost } from "redux/features/postSlice";
 import { Avatar } from "./Avatar";
+import { RiShareForwardLine } from "react-icons/ri";
+import { toast } from "react-toastify";
 dayjs.extend(relativeTime);
 
 export const PostCard = ({ post }) => {
@@ -16,6 +18,11 @@ export const PostCard = ({ post }) => {
   const { bookmarks } = usePosts();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleShare = (id) => {
+    navigator.clipboard.writeText(`${window.location.origin}/post/${id}`);
+    toast.success("Link copied to clipboard");
+  };
 
   return (
     <article className="bg-white dark:bg-gray-800 rounded border-1 mx-2 md:mx-0 mb-5 shadow-md">
@@ -49,7 +56,7 @@ export const PostCard = ({ post }) => {
         <div className="flex">
           <div className="flex items-center mr-2">
             <button
-              className="p-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+              className="p-2 mr-1 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
               title="like"
               onClick={() =>
                 dispatch(likePost({ post_id: post._id, user_id: user._id }))
@@ -65,7 +72,7 @@ export const PostCard = ({ post }) => {
           </div>
           <div className="flex items-center mr-2">
             <button
-              className="p-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+              className="p-2 mr-1 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
               title="comment"
               onClick={() => {
                 navigate(`/post/${post._id}`);
@@ -76,17 +83,26 @@ export const PostCard = ({ post }) => {
             <span>{post.comments.length}</span>
           </div>
         </div>
-        <button
-          className="py-2 px-3 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
-          title="save"
-          onClick={() => dispatch(bookmarkPost(post))}
-        >
-          {bookmarks.find((bookmark) => bookmark._id === post._id) ? (
-            <BsBookmarkFill className="text-teal-500" size="1.1rem" />
-          ) : (
-            <BsBookmark size="1.1rem" />
-          )}
-        </button>
+        <div className="flex">
+          <button
+            className="p-2 mx-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+            title="share"
+            onClick={() => handleShare(post._id)}
+          >
+            <RiShareForwardLine />
+          </button>
+          <button
+            className="py-2 px-3 mr-2 rounded-full text-2xl hover:bg-teal-50 hover:text-teal-500"
+            title="bookmark"
+            onClick={() => dispatch(bookmarkPost(post))}
+          >
+            {bookmarks.find((bookmark) => bookmark._id === post._id) ? (
+              <BsBookmarkFill className="text-teal-500" size="1.1rem" />
+            ) : (
+              <BsBookmark size="1.1rem" />
+            )}
+          </button>
+        </div>
       </section>
     </article>
   );
