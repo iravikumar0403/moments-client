@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { PostCard, PostSkeleton, Avatar } from "components";
+import { PostCard, PostSkeleton, Avatar, SortPost } from "components";
 import { useDispatch } from "react-redux";
 import { useAuth, usePosts } from "hooks/selectors";
 import { getBookmarks, getFeedPosts } from "redux/features/postSlice";
@@ -7,13 +7,14 @@ import { showModal } from "redux/features/modalSlice";
 import { POST } from "utils/constants";
 import { useDocumentTitle } from "hooks/useDocumentTitle";
 import { Link } from "react-router-dom";
+import { sortPosts } from "utils/sortPosts";
 
 export const Feed = () => {
   useDocumentTitle("Home / Moments");
-  const { loading, creatingPost, posts } = usePosts();
+  const { loading, creatingPost, posts, sortBy } = usePosts();
   const { user } = useAuth();
   const dispatch = useDispatch();
-
+  const feed = sortPosts(posts, sortBy);
   useEffect(() => {
     dispatch(getFeedPosts());
     dispatch(getBookmarks());
@@ -21,7 +22,7 @@ export const Feed = () => {
 
   return (
     <>
-      <div className="hidden md:block border-b mb-2 dark:border-slate-600">
+      <div className="hidden md:block mb-2 dark:border-slate-600">
         <div className="flex bg-white mb-2 p-4 rounded dark:bg-slate-800">
           <Avatar profile={user.avatar} name={user.firstname} />
           <button
@@ -32,13 +33,14 @@ export const Feed = () => {
           </button>
         </div>
       </div>
+      <SortPost />
       {creatingPost && <PostSkeleton />}
       {loading ? (
         <>
           <PostSkeleton /> <PostSkeleton />
         </>
-      ) : posts.length > 0 ? (
-        posts.map((post) => <PostCard post={post} key={post._id} />)
+      ) : feed.length > 0 ? (
+        feed.map((post) => <PostCard post={post} key={post._id} />)
       ) : (
         <div className="text-center">
           <p className="text-center mt-32 text-slate-500">

@@ -2,12 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { uploadImage } from "utils/uploadImage";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { LATEST_FIRST } from "utils/constants";
 const { REACT_APP_API_URL } = process.env;
 
 const initialState = {
   loading: false,
   posts: [],
   bookmarks: [],
+  sortBy: LATEST_FIRST,
   creatingPost: false,
   currentPost: null,
   commentLoading: false,
@@ -176,6 +178,11 @@ export const getPostById = createAsyncThunk(
 const postSlice = createSlice({
   name: "posts",
   initialState,
+  reducers: {
+    setSortBy: (state, action) => {
+      state.sortBy = action.payload;
+    },
+  },
   extraReducers: {
     [getAllPosts.pending]: (state) => {
       state.loading = true;
@@ -282,4 +289,5 @@ const postSlice = createSlice({
   },
 });
 
+export const { setSortBy } = postSlice.actions;
 export default postSlice.reducer;
