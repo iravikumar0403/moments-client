@@ -20,7 +20,7 @@ export const PostCard = ({ post }) => {
   const navigate = useNavigate();
 
   const handleShare = (id) => {
-    navigator.clipboard.writeText(`${window.location.origin}/post/${id}`);
+    navigator.clipboard.writeText(`${window.location.origin}/post/share/${id}`);
     toast.success("Link copied to clipboard");
   };
 

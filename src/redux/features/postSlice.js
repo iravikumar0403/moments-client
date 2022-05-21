@@ -163,10 +163,11 @@ export const getPostById = createAsyncThunk(
   "posts/getPostById",
   async (post_id, { rejectWithValue, getState }) => {
     try {
-      const state = getState();
-      const currentPost = state.posts.posts.find(
-        (post) => post._id === post_id
-      );
+      const allPosts = [
+        ...getState().posts.explorePosts,
+        ...getState().posts.feedPosts,
+      ];
+      const currentPost = allPosts.find((post) => post._id === post_id);
       if (currentPost) {
         return currentPost;
       } else {

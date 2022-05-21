@@ -27,7 +27,7 @@ export const routes = [
     element: <Signup />,
   },
   {
-    path: "/post/:id",
+    path: "/post/share/:id",
     element: <SharedPost />,
   },
   {
