@@ -26,6 +26,7 @@ export const PostInputModal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (postContent === "" && files.length === 0) return;
     if (selectedPost) {
       dispatch(
         editPost({
