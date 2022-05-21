@@ -224,7 +224,8 @@ const postSlice = createSlice({
       state.creatingPost = true;
     },
     [addPost.fulfilled]: (state, action) => {
-      state.posts = [action.payload, ...state.posts];
+      state.feedPosts = [action.payload, ...state.feedPosts];
+      state.explorePosts = [action.payload, ...state.explorePosts];
       state.creatingPost = false;
     },
     [addPost.rejected]: (state) => {
@@ -235,16 +236,33 @@ const postSlice = createSlice({
     },
     [editPost.fulfilled]: (state, action) => {
       state.creatingPost = false;
-      state.posts = [
+      state.feedPosts = [
         action.payload,
-        ...state.posts.filter((post) => post._id !== action.payload._id),
+        ...state.feedPosts.filter((post) => post._id !== action.payload._id),
+      ];
+      state.explorePosts = [
+        action.payload,
+        ...state.explorePosts.filter((post) => post._id !== action.payload._id),
       ];
     },
     [deletePost.pending]: (state, action) => {
-      state.posts = state.posts.filter((post) => post._id !== action.meta.arg);
+      state.feedPosts = state.feedPosts.filter(
+        (post) => post._id !== action.meta.arg
+      );
+      state.explorePosts = state.explorePosts.filter(
+        (post) => post._id !== action.meta.arg
+      );
     },
     [likePost.pending]: (state, action) => {
-      state.posts = state.posts.map((post) => {
+      state.feedPosts = state.feedPosts.map((post) => {
+        if (post._id === action.meta.arg.post_id) {
+          post.likes.includes(action.meta.arg.user_id)
+            ? post.likes.pop(action.meta.arg.user_id)
+            : post.likes.push(action.meta.arg.user_id);
+        }
+        return post;
+      });
+      state.explorePosts = state.explorePosts.map((post) => {
         if (post._id === action.meta.arg.post_id) {
           post.likes.includes(action.meta.arg.user_id)
             ? post.likes.pop(action.meta.arg.user_id)
@@ -254,7 +272,10 @@ const postSlice = createSlice({
       });
     },
     [likePost.fulfilled]: (state, action) => {
-      state.posts = state.posts.map((post) =>
+      state.feedPosts = state.feedPosts.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      );
+      state.explorePosts = state.explorePosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
       state.currentPost = action.payload;
@@ -297,7 +318,10 @@ const postSlice = createSlice({
     },
     [addComment.fulfilled]: (state, action) => {
       state.commentLoading = false;
-      state.posts = state.posts.map((post) =>
+      state.feedPosts = state.feedPosts.map((post) =>
+        post._id === action.payload._id ? action.payload : post
+      );
+      state.explorePosts = state.explorePosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
       state.currentPost = action.payload;
