@@ -106,16 +106,19 @@ Backend Repository: https://github.com/ravikumar0403/moments-api/tree/alpha-v1
 - Has light and dark mode.
 
 ## Screenshots
+
+<p align="middle">
+  
 ![chrome-capture-2022-4-21 (1)](https://user-images.githubusercontent.com/62254807/169636410-7c6ce203-fdb2-4312-b0ec-95fb2f1ec8c9.gif)
 ![chrome-capture-2022-4-21](https://user-images.githubusercontent.com/62254807/169636420-60f75e7d-af54-4399-bff7-6fe42ee3145c.gif)
 
-<p align="middle">
 <img width="250px" src="https://user-images.githubusercontent.com/62254807/169636425-8913b32e-9159-4837-a463-2b09aa77d90a.png"/>
 <img width="250px" src="https://user-images.githubusercontent.com/62254807/169636429-9437ec75-6304-49c5-9a83-5328f3761605.png"/>
-<img width="250px" src="https://user-images.githubusercontent.com/62254807/169636552-712048a2-b0d1-4f1e-a0d4-314486ceef31.png"/></p>
+<img width="250px" src="https://user-images.githubusercontent.com/62254807/169636552-712048a2-b0d1-4f1e-a0d4-314486ceef31.png"/>
 
 
 ![moments-social netlify app_](https://user-images.githubusercontent.com/62254807/169636554-5cb8d7ec-3457-4439-95ef-f6e7c58575c0.png)
+  </p>
 
 
 ## 👨‍💻 Connect with me
