@@ -3,8 +3,10 @@ import { Loader, PostCard } from "components";
 import { usePosts } from "hooks/selectors";
 import { useDispatch } from "react-redux";
 import { getBookmarks } from "redux/features/postSlice";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 export const Bookmarks = () => {
+  useDocumentTitle("Bookmarks / Moments");
   const { loading, bookmarks } = usePosts();
   const dispatch = useDispatch();
 

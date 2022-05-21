@@ -1,7 +1,9 @@
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 import React from "react";
 import NoNotification from "../assets/notify.svg";
 
 export const Notifications = () => {
+  useDocumentTitle("Notifications / Moments");
   return (
     <div className="bg-white dark:bg-slate-900 shadow rounded min-h-[85vh]">
       <img

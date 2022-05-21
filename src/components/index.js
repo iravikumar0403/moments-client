@@ -19,6 +19,7 @@ export { ProfileDetails } from "./ProfileDetails";
 export { ProfileTabs } from "./ProfileTabs";
 export { RequireAuth } from "./RequireAuth";
 export { SideNav } from "./SideNav";
+export { SortPost } from "./SortPost";
 export { Toast } from "./Toast";
 export { UserCard } from "./UserCard";
 export { UserPosts } from "./UserPosts";

@@ -4,5 +4,6 @@ export { Feed } from "./Feed";
 export { Login } from "./Login";
 export { Notifications } from "./Notifications";
 export { Profile } from "./Profile";
+export { SharedPost } from "./SharedPost";
 export { Signup } from "./Signup";
 export { SinglePost } from "./SinglePost";

@@ -2,13 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { uploadImage } from "utils/uploadImage";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { LATEST_FIRST } from "utils/constants";
 const { REACT_APP_API_URL } = process.env;
 
 const initialState = {
   loading: false,
-  allPosts: [],
-  userPost: [],
+  explorePosts: [],
+  feedPosts: [],
   bookmarks: [],
+  sortBy: LATEST_FIRST,
   creatingPost: false,
   currentPost: null,
   commentLoading: false,
@@ -17,9 +19,26 @@ const initialState = {
 
 export const getAllPosts = createAsyncThunk(
   "posts/getAllPosts",
-  async (_, { rejectWithValue }) => {
+  async (page = 0, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${REACT_APP_API_URL}/posts`);
+      const { data } = await axios.get(
+        `${REACT_APP_API_URL}/posts?page=${page}`
+      );
+      return data;
+    } catch (error) {
+      toast.error("Failed to fetch post");
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getFeedPosts = createAsyncThunk(
+  "posts/getFeedPosts",
+  async (page = 0, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(
+        `${REACT_APP_API_URL}/posts/feed?page=${page}`
+      );
       return data;
     } catch (error) {
       toast.error("Failed to fetch post");
@@ -88,6 +107,7 @@ export const likePost = createAsyncThunk(
       );
       return data;
     } catch (error) {
+      if (error.response.status === 401) toast.error("You are not logged in");
       return rejectWithValue(error.response.message);
     }
   }
@@ -102,7 +122,8 @@ export const bookmarkPost = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      toast.error("Something went wrong");
+      if (error.response.status === 401) toast.error("You are not logged in");
+      else toast.error("Something went wrong");
       return rejectWithValue(error.response.message);
     }
   }
@@ -142,10 +163,11 @@ export const getPostById = createAsyncThunk(
   "posts/getPostById",
   async (post_id, { rejectWithValue, getState }) => {
     try {
-      const state = getState();
-      const currentPost = state.posts.allPosts.find(
-        (post) => post._id === post_id
-      );
+      const allPosts = [
+        ...getState().posts.explorePosts,
+        ...getState().posts.feedPosts,
+      ];
+      const currentPost = allPosts.find((post) => post._id === post_id);
       if (currentPost) {
         return currentPost;
       } else {
@@ -164,6 +186,11 @@ export const getPostById = createAsyncThunk(
 const postSlice = createSlice({
   name: "posts",
   initialState,
+  reducers: {
+    setSortBy: (state, action) => {
+      state.sortBy = action.payload;
+    },
+  },
   extraReducers: {
     [getAllPosts.pending]: (state) => {
       state.loading = true;
@@ -171,18 +198,35 @@ const postSlice = createSlice({
     },
     [getAllPosts.fulfilled]: (state, action) => {
       state.loading = false;
-      state.allPosts = action.payload;
+      state.explorePosts =
+        state.explorePage === action.payload.page
+          ? state.explorePosts
+          : [...state.explorePosts, ...action.payload.posts];
+      state.explorePage = action.payload.page;
+      state.exploreHasMore = action.payload.has_more;
     },
     [getAllPosts.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
+    [getFeedPosts.pending]: (state) => {
+      state.loading = true;
+    },
+    [getFeedPosts.fulfilled]: (state, action) => {
+      state.feedPosts =
+        state.feedPage === action.payload.page
+          ? state.feedPosts
+          : [...state.feedPosts, ...action.payload.posts];
+      state.feedHasMore = action.payload.has_more;
+      state.feedPage = action.payload.page;
+      state.loading = false;
+    },
     [addPost.pending]: (state) => {
       state.creatingPost = true;
     },
     [addPost.fulfilled]: (state, action) => {
-      state.allPosts = [action.payload, ...state.allPosts];
-      state.userPost = [action.payload, ...state.userPost];
+      state.feedPosts = [action.payload, ...state.feedPosts];
+      state.explorePosts = [action.payload, ...state.explorePosts];
       state.creatingPost = false;
     },
     [addPost.rejected]: (state) => {
@@ -193,25 +237,25 @@ const postSlice = createSlice({
     },
     [editPost.fulfilled]: (state, action) => {
       state.creatingPost = false;
-      state.allPosts = [
+      state.feedPosts = [
         action.payload,
-        ...state.allPosts.filter((post) => post._id !== action.payload._id),
+        ...state.feedPosts.filter((post) => post._id !== action.payload._id),
       ];
-      state.userPost = [
+      state.explorePosts = [
         action.payload,
-        ...state.userPost.filter((post) => post._id !== action.payload._id),
+        ...state.explorePosts.filter((post) => post._id !== action.payload._id),
       ];
     },
     [deletePost.pending]: (state, action) => {
-      state.allPosts = state.allPosts.filter(
+      state.feedPosts = state.feedPosts.filter(
         (post) => post._id !== action.meta.arg
       );
-      state.userPost = state.userPost.filter(
+      state.explorePosts = state.explorePosts.filter(
         (post) => post._id !== action.meta.arg
       );
     },
     [likePost.pending]: (state, action) => {
-      state.allPosts = state.allPosts.map((post) => {
+      state.feedPosts = state.feedPosts.map((post) => {
         if (post._id === action.meta.arg.post_id) {
           post.likes.includes(action.meta.arg.user_id)
             ? post.likes.pop(action.meta.arg.user_id)
@@ -219,20 +263,20 @@ const postSlice = createSlice({
         }
         return post;
       });
-      state.userPost = state.userPost.map((post) => {
+      state.explorePosts = state.explorePosts.map((post) => {
         if (post._id === action.meta.arg.post_id) {
           post.likes.includes(action.meta.arg.user_id)
-            ? post.likes.push(action.meta.arg.user_id)
-            : post.likes.pop(action.meta.arg.user_id);
+            ? post.likes.pop(action.meta.arg.user_id)
+            : post.likes.push(action.meta.arg.user_id);
         }
         return post;
       });
     },
     [likePost.fulfilled]: (state, action) => {
-      state.allPosts = state.allPosts.map((post) =>
+      state.feedPosts = state.feedPosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
-      state.userPost = state.userPost.map((post) =>
+      state.explorePosts = state.explorePosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
       state.currentPost = action.payload;
@@ -275,10 +319,10 @@ const postSlice = createSlice({
     },
     [addComment.fulfilled]: (state, action) => {
       state.commentLoading = false;
-      state.allPosts = state.allPosts.map((post) =>
+      state.feedPosts = state.feedPosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
-      state.userPost = state.userPost.map((post) =>
+      state.explorePosts = state.explorePosts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
       state.currentPost = action.payload;
@@ -286,4 +330,5 @@ const postSlice = createSlice({
   },
 });
 
+export const { setSortBy } = postSlice.actions;
 export default postSlice.reducer;

@@ -4,8 +4,10 @@ import { useAuth, useProfile } from "hooks/selectors";
 import { Outlet, useParams } from "react-router-dom";
 import { getUserByUsername } from "redux/features/profileSlice";
 import { Loader, ProfileDetails, ProfileTabs } from "components";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 export const Profile = () => {
+  useDocumentTitle("Profile / Moments");
   const { username } = useParams();
   const { user } = useAuth();
   const dispatch = useDispatch();

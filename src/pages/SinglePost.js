@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ButtonWithLoader, Comment, Loader, PostCard } from "components";
+import { ButtonWithLoader, Comment, PostCard, PostSkeleton } from "components";
 import { useAuth, usePosts } from "hooks/selectors";
 import { useAutoResize } from "hooks/useAutoResize";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addComment, getPostById } from "redux/features/postSlice";
+import { useDocumentTitle } from "hooks/useDocumentTitle";
 
 const initialTextAreaHeight = "42px";
 
@@ -16,13 +17,18 @@ export const SinglePost = () => {
   const { loading, commentLoading, currentPost } = usePosts();
   const [comment, setComment] = useState("");
   const textAreaRef = useAutoResize(comment, initialTextAreaHeight);
+  useDocumentTitle(
+    currentPost?.author?.firstname
+      ? `${currentPost.author.firstname} / Moments`
+      : ""
+  );
 
   useEffect(() => {
     dispatch(getPostById(params.id));
   }, [dispatch, params.id]);
 
   if (loading || !currentPost) {
-    return <Loader />;
+    return <PostSkeleton />;
   }
 
   return (

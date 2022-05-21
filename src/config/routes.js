@@ -12,6 +12,7 @@ import {
   Login,
   Notifications,
   Profile,
+  SharedPost,
   Signup,
   SinglePost,
 } from "pages";
@@ -24,6 +25,10 @@ export const routes = [
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/post/share/:id",
+    element: <SharedPost />,
   },
   {
     path: "/",
