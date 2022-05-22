@@ -1,14 +1,16 @@
 import axios from "axios";
 import { Comment, PostCard, PostSkeleton } from "components";
+import { useAuth } from "hooks/selectors";
 import { useAutoResize } from "hooks/useAutoResize";
 import { useDocumentTitle } from "hooks/useDocumentTitle";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 
 const initialTextAreaHeight = "42px";
 
 export const SharedPost = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const textAreaRef = useAutoResize(comment, initialTextAreaHeight);
@@ -24,6 +26,10 @@ export const SharedPost = () => {
       setPost(data);
     })();
   }, [id]);
+
+  if (user) {
+    return <Navigate to={`/post/${id}`} replace />;
+  }
 
   return (
     <div className="grid-container container mx-auto max-w-screen-xl">
